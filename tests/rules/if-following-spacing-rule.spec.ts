@@ -1,0 +1,61 @@
+import { ifFollowingSpacingRule } from "../../src/rules/if-following-spacing-rule";
+import { createRuleTester } from "../helpers/rule-tester";
+
+createRuleTester().run("if-following-spacing", ifFollowingSpacingRule, {
+  valid: [
+    {
+      code: [
+        "class Sample {",
+        "    test(flag: boolean): string {",
+        "        if (!flag) {",
+        "            return 'no';",
+        "        }",
+        "",
+        "        return 'yes';",
+        "    }",
+        "}",
+      ].join("\n"),
+    },
+    {
+      code: [
+        "class Sample {",
+        "    test(flag: boolean): string {",
+        "        if (!flag) {",
+        "            return 'no';",
+        "        }",
+        "    }",
+        "}",
+      ].join("\n"),
+    },
+  ],
+  invalid: [
+    {
+      code: [
+        "class Sample {",
+        "    test(flag: boolean): string {",
+        "        if (!flag) {",
+        "            return 'no';",
+        "        }",
+        "        return 'yes';",
+        "    }",
+        "}",
+      ].join("\n"),
+      errors: [{ messageId: "ifFollowingSpacing" }],
+    },
+    {
+      code: [
+        "class Sample {",
+        "    test(flag: boolean): string {",
+        "        if (flag) {",
+        "            return 'yes';",
+        "        } else {",
+        "            return 'no';",
+        "        }",
+        "        return 'done';",
+        "    }",
+        "}",
+      ].join("\n"),
+      errors: [{ messageId: "ifFollowingSpacing" }],
+    },
+  ],
+});
