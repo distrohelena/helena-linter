@@ -8,9 +8,9 @@ import { redundantElseIfRule } from "./redundant-else-if-rule.js";
  * Collects all public Helena linter rules.
  */
 export const helenaRules = {
-  "declaration-spacing": declarationSpacingRule,
-  "early-return": earlyReturnRule,
-  "if-else-if-chain": ifElseIfChainRule,
-  "if-following-spacing": ifFollowingSpacingRule,
-  "redundant-else-if": redundantElseIfRule,
+    "declaration-spacing": declarationSpacingRule,
+    "early-return": earlyReturnRule,
+    "if-else-if-chain": ifElseIfChainRule,
+    "if-following-spacing": ifFollowingSpacingRule,
+    "redundant-else-if": redundantElseIfRule,
 };

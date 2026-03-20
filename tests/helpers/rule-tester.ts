@@ -10,12 +10,12 @@ RuleTester.it = it;
  * @returns Configured rule tester.
  */
 export function createRuleTester(): RuleTester {
-  return new RuleTester({
-    languageOptions: {
-      parserOptions: {
-        ecmaVersion: 2022,
-        sourceType: "module",
-      },
-    },
-  });
+    return new RuleTester({
+        languageOptions: {
+            parserOptions: {
+                ecmaVersion: 2022,
+                sourceType: "module",
+            },
+        },
+    });
 }

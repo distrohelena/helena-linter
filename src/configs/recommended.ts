@@ -8,28 +8,28 @@ import type { HelenaLinterPlugin } from "../types/plugin-export.js";
  * @returns Recommended flat config entries.
  */
 export function createRecommendedConfig(
-  plugin: HelenaLinterPlugin,
+    plugin: HelenaLinterPlugin,
 ): Linter.Config[] {
-  return [
-    {
-      files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
-      languageOptions: {
-        parser: tsParser,
-        ecmaVersion: 2022,
-        sourceType: "module",
-      },
-      plugins: {
-        "@distrohelena/linter": plugin as unknown as NonNullable<
-          Linter.Config["plugins"]
-        >[string],
-      },
-      rules: {
-        "@distrohelena/linter/declaration-spacing": "error",
-        "@distrohelena/linter/early-return": "error",
-        "@distrohelena/linter/if-else-if-chain": "error",
-        "@distrohelena/linter/if-following-spacing": "error",
-        "@distrohelena/linter/redundant-else-if": "error",
-      },
-    },
-  ];
+    return [
+        {
+            files: ["**/*.ts", "**/*.tsx", "**/*.mts", "**/*.cts"],
+            languageOptions: {
+                parser: tsParser,
+                ecmaVersion: 2022,
+                sourceType: "module",
+            },
+            plugins: {
+                "@distrohelena/linter": plugin as unknown as NonNullable<
+                    Linter.Config["plugins"]
+                >[string],
+            },
+            rules: {
+                "@distrohelena/linter/declaration-spacing": "error",
+                "@distrohelena/linter/early-return": "error",
+                "@distrohelena/linter/if-else-if-chain": "error",
+                "@distrohelena/linter/if-following-spacing": "error",
+                "@distrohelena/linter/redundant-else-if": "error",
+            },
+        },
+    ];
 }

@@ -5,14 +5,14 @@
  * @returns ESLint source location.
  */
 export function createReportLoc(line: number, column: number) {
-  return {
-    start: {
-      line,
-      column: column - 1,
-    },
-    end: {
-      line,
-      column,
-    },
-  };
+    return {
+        start: {
+            line,
+            column: column - 1,
+        },
+        end: {
+            line,
+            column,
+        },
+    };
 }

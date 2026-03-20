@@ -1,61 +1,64 @@
 {
-  "name": "@distrohelena/linter",
-  "version": "0.1.0",
-  "description": "Helena TypeScript lint rules for ESLint flat config.",
-  "type": "module",
-  "main": "./dist/index.js",
-  "types": "./dist/index.d.ts",
-  "exports": {
-    ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+    "name": "@distrohelena/linter",
+    "version": "0.1.0",
+    "description": "Helena TypeScript lint rules for ESLint flat config.",
+    "type": "module",
+    "main": "./dist/index.js",
+    "types": "./dist/index.d.ts",
+    "exports": {
+        ".": {
+            "types": "./dist/index.d.ts",
+            "import": "./dist/index.js"
+        },
+        "./declaration-spacing": {
+            "types": "./dist/declaration-spacing.d.ts",
+            "import": "./dist/declaration-spacing.js"
+        },
+        "./early-return": {
+            "types": "./dist/early-return.d.ts",
+            "import": "./dist/early-return.js"
+        },
+        "./if-else-if-chain": {
+            "types": "./dist/if-else-if-chain.d.ts",
+            "import": "./dist/if-else-if-chain.js"
+        },
+        "./if-following-spacing": {
+            "types": "./dist/if-following-spacing.d.ts",
+            "import": "./dist/if-following-spacing.js"
+        },
+        "./redundant-else-if": {
+            "types": "./dist/redundant-else-if.d.ts",
+            "import": "./dist/redundant-else-if.js"
+        }
     },
-    "./declaration-spacing": {
-      "types": "./dist/declaration-spacing.d.ts",
-      "import": "./dist/declaration-spacing.js"
+    "files": [
+        "dist"
+    ],
+    "license": "MIT",
+    "private": false,
+    "publishConfig": {
+        "access": "public"
     },
-    "./early-return": {
-      "types": "./dist/early-return.d.ts",
-      "import": "./dist/early-return.js"
+    "scripts": {
+        "build": "tsc -p tsconfig.build.json",
+        "test": "vitest run",
+        "lint": "eslint . --max-warnings=0",
+        "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"*.{js,json,md}\"",
+        "lint:smoke": "node scripts/run-smoke-test.mjs"
     },
-    "./if-else-if-chain": {
-      "types": "./dist/if-else-if-chain.d.ts",
-      "import": "./dist/if-else-if-chain.js"
+    "devDependencies": {
+        "@typescript-eslint/eslint-plugin": "^8.57.1",
+        "@typescript-eslint/parser": "^8.57.1",
+        "@typescript-eslint/rule-tester": "^8.57.1",
+        "@typescript-eslint/utils": "^8.57.1",
+        "eslint": "^10.0.3",
+        "prettier": "^3.8.1",
+        "typescript": "^5.9.3",
+        "vitest": "^4.1.0"
     },
-    "./if-following-spacing": {
-      "types": "./dist/if-following-spacing.d.ts",
-      "import": "./dist/if-following-spacing.js"
-    },
-    "./redundant-else-if": {
-      "types": "./dist/redundant-else-if.d.ts",
-      "import": "./dist/redundant-else-if.js"
+    "peerDependencies": {
+        "@typescript-eslint/parser": "^8.57.1",
+        "eslint": "^10.0.3",
+        "typescript": "^5.9.3"
     }
-  },
-  "files": [
-    "dist"
-  ],
-  "license": "MIT",
-  "private": true,
-  "scripts": {
-    "build": "tsc -p tsconfig.build.json",
-    "test": "vitest run",
-    "lint": "eslint . --max-warnings=0",
-    "format": "prettier --write \"src/**/*.ts\" \"tests/**/*.ts\" \"scripts/**/*.mjs\" \"*.{js,json,md}\"",
-    "lint:smoke": "node scripts/run-smoke-test.mjs"
-  },
-  "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^8.57.1",
-    "@typescript-eslint/parser": "^8.57.1",
-    "@typescript-eslint/rule-tester": "^8.57.1",
-    "@typescript-eslint/utils": "^8.57.1",
-    "eslint": "^10.0.3",
-    "prettier": "^3.8.1",
-    "typescript": "^5.9.3",
-    "vitest": "^4.1.0"
-  },
-  "peerDependencies": {
-    "@typescript-eslint/parser": "^8.57.1",
-    "eslint": "^10.0.3",
-    "typescript": "^5.9.3"
-  }
 }
