@@ -24,8 +24,11 @@ export function createRecommendedConfig(
                 >[string],
             },
             rules: {
+                "@distrohelena/linter/control-block-following-spacing": "error",
+                "@distrohelena/linter/declaration-leading-spacing": "error",
                 "@distrohelena/linter/declaration-spacing": "error",
                 "@distrohelena/linter/early-return": "error",
+                "@distrohelena/linter/exit-spacing": "error",
                 "@distrohelena/linter/if-else-if-chain": "error",
                 "@distrohelena/linter/if-following-spacing": "error",
                 "@distrohelena/linter/redundant-else-if": "error",

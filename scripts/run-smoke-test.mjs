@@ -29,7 +29,10 @@ const ruleIds = fixtureResult.messages
     .map((message) => message.ruleId)
     .filter(Boolean);
 const requiredRuleIds = [
+    "@distrohelena/linter/control-block-following-spacing",
+    "@distrohelena/linter/declaration-leading-spacing",
     "@distrohelena/linter/declaration-spacing",
+    "@distrohelena/linter/exit-spacing",
     "@distrohelena/linter/if-following-spacing",
 ];
 const missingRuleIds = requiredRuleIds.filter(

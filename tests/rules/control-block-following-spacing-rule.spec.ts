@@ -1,0 +1,98 @@
+import { controlBlockFollowingSpacingRule } from "../../src/rules/control-block-following-spacing-rule";
+import { createRuleTester } from "../helpers/rule-tester";
+
+createRuleTester().run(
+    "control-block-following-spacing",
+    controlBlockFollowingSpacingRule,
+    {
+        valid: [
+            {
+                code: [
+                    "class Sample {",
+                    "    test(values: string[]): string[] {",
+                    "        for (const value of values) {",
+                    "            if (value === 'stop') {",
+                    "                return values;",
+                    "            }",
+                    "        }",
+                    "",
+                    "        return values;",
+                    "    }",
+                    "}",
+                ].join("\n"),
+            },
+            {
+                code: [
+                    "class Sample {",
+                    "    test(values: string[]): string[] {",
+                    "        try {",
+                    "            return values;",
+                    "        } catch {",
+                    "            return [];",
+                    "        }",
+                    "",
+                    "        return values;",
+                    "    }",
+                    "}",
+                ].join("\n"),
+            },
+        ],
+        invalid: [
+            {
+                code: [
+                    "class Sample {",
+                    "    test(values: string[]): string[] {",
+                    "        for (const value of values) {",
+                    "            if (value === 'stop') {",
+                    "                return values;",
+                    "            }",
+                    "        }",
+                    "        return values;",
+                    "    }",
+                    "}",
+                ].join("\n"),
+                output: [
+                    "class Sample {",
+                    "    test(values: string[]): string[] {",
+                    "        for (const value of values) {",
+                    "            if (value === 'stop') {",
+                    "                return values;",
+                    "            }",
+                    "        }",
+                    "",
+                    "        return values;",
+                    "    }",
+                    "}",
+                ].join("\n"),
+                errors: [{ messageId: "controlBlockFollowingSpacing" }],
+            },
+            {
+                code: [
+                    "class Sample {",
+                    "    test(values: string[]): string[] {",
+                    "        try {",
+                    "            return values;",
+                    "        } catch {",
+                    "            return [];",
+                    "        } return values;",
+                    "    }",
+                    "}",
+                ].join("\n"),
+                output: [
+                    "class Sample {",
+                    "    test(values: string[]): string[] {",
+                    "        try {",
+                    "            return values;",
+                    "        } catch {",
+                    "            return [];",
+                    "        }",
+                    "",
+                    "        return values;",
+                    "    }",
+                    "}",
+                ].join("\n"),
+                errors: [{ messageId: "controlBlockFollowingSpacing" }],
+            },
+        ],
+    },
+);

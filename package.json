@@ -2,6 +2,14 @@
     "name": "@distrohelena/linter",
     "version": "0.1.0",
     "description": "Helena TypeScript lint rules for ESLint flat config.",
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/distrohelena/helena-linter.git"
+    },
+    "homepage": "https://github.com/distrohelena/helena-linter",
+    "bugs": {
+        "url": "https://github.com/distrohelena/helena-linter/issues"
+    },
     "type": "module",
     "main": "./dist/index.js",
     "types": "./dist/index.d.ts",
@@ -10,6 +18,14 @@
             "types": "./dist/index.d.ts",
             "import": "./dist/index.js"
         },
+        "./control-block-following-spacing": {
+            "types": "./dist/control-block-following-spacing.d.ts",
+            "import": "./dist/control-block-following-spacing.js"
+        },
+        "./declaration-leading-spacing": {
+            "types": "./dist/declaration-leading-spacing.d.ts",
+            "import": "./dist/declaration-leading-spacing.js"
+        },
         "./declaration-spacing": {
             "types": "./dist/declaration-spacing.d.ts",
             "import": "./dist/declaration-spacing.js"
@@ -17,6 +33,10 @@
         "./early-return": {
             "types": "./dist/early-return.d.ts",
             "import": "./dist/early-return.js"
+        },
+        "./exit-spacing": {
+            "types": "./dist/exit-spacing.d.ts",
+            "import": "./dist/exit-spacing.js"
         },
         "./if-else-if-chain": {
             "types": "./dist/if-else-if-chain.d.ts",

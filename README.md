@@ -2,6 +2,8 @@
 
 TypeScript-only Helena lint rules for modern ESLint flat config.
 
+Repository: https://github.com/distrohelena/helena-linter
+
 ## Install
 
 ```bash
@@ -18,8 +20,11 @@ export default [...helenaLinter.configs.recommended];
 
 This enables the canonical Helena rule IDs:
 
+- `@distrohelena/linter/control-block-following-spacing`
+- `@distrohelena/linter/declaration-leading-spacing`
 - `@distrohelena/linter/declaration-spacing`
 - `@distrohelena/linter/early-return`
+- `@distrohelena/linter/exit-spacing`
 - `@distrohelena/linter/if-else-if-chain`
 - `@distrohelena/linter/if-following-spacing`
 - `@distrohelena/linter/redundant-else-if`
@@ -27,8 +32,11 @@ This enables the canonical Helena rule IDs:
 ## Per-Rule Imports
 
 ```ts
+import controlBlockFollowingSpacingRule from "@distrohelena/linter/control-block-following-spacing";
+import declarationLeadingSpacingRule from "@distrohelena/linter/declaration-leading-spacing";
 import declarationSpacingRule from "@distrohelena/linter/declaration-spacing";
 import earlyReturnRule from "@distrohelena/linter/early-return";
+import exitSpacingRule from "@distrohelena/linter/exit-spacing";
 import ifElseIfChainRule from "@distrohelena/linter/if-else-if-chain";
 import ifFollowingSpacingRule from "@distrohelena/linter/if-following-spacing";
 import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
@@ -36,10 +44,16 @@ import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
 
 ## Included Rules
 
+- `@distrohelena/linter/control-block-following-spacing`
+  Requires a blank line after a completed `for`, `while`, `do`, `switch`, or `try` statement before the next sibling statement.
+- `@distrohelena/linter/declaration-leading-spacing`
+  Requires a blank line before a declaration statement when the previous sibling statement is not a declaration.
 - `@distrohelena/linter/declaration-spacing`
   Requires a blank line after a declaration statement before the next sibling statement.
 - `@distrohelena/linter/early-return`
   Flags wrapped happy-path `if` blocks that should be rewritten as guard clauses.
+- `@distrohelena/linter/exit-spacing`
+  Requires a blank line before `return`, `throw`, `break`, and `continue` statements.
 - `@distrohelena/linter/if-else-if-chain`
   Flags collapsed null checks and sibling `if` branches that should be written as `else if`.
 - `@distrohelena/linter/if-following-spacing`
