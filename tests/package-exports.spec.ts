@@ -16,6 +16,7 @@ describe("package subpath exports", () => {
             "./early-return": expect.any(Object),
             "./exit-spacing": expect.any(Object),
             "./if-else-if-chain": expect.any(Object),
+            "./if-leading-spacing": expect.any(Object),
             "./if-following-spacing": expect.any(Object),
             "./redundant-else-if": expect.any(Object),
         });

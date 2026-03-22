@@ -33,6 +33,7 @@ const requiredRuleIds = [
     "@distrohelena/linter/declaration-leading-spacing",
     "@distrohelena/linter/declaration-spacing",
     "@distrohelena/linter/exit-spacing",
+    "@distrohelena/linter/if-leading-spacing",
     "@distrohelena/linter/if-following-spacing",
 ];
 const missingRuleIds = requiredRuleIds.filter(

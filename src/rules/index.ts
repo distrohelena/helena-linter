@@ -5,6 +5,7 @@ import { earlyReturnRule } from "./early-return-rule.js";
 import { exitSpacingRule } from "./exit-spacing-rule.js";
 import { ifElseIfChainRule } from "./if-else-if-chain-rule.js";
 import { ifFollowingSpacingRule } from "./if-following-spacing-rule.js";
+import { ifLeadingSpacingRule } from "./if-leading-spacing-rule.js";
 import { redundantElseIfRule } from "./redundant-else-if-rule.js";
 
 /**
@@ -18,5 +19,6 @@ export const helenaRules = {
     "exit-spacing": exitSpacingRule,
     "if-else-if-chain": ifElseIfChainRule,
     "if-following-spacing": ifFollowingSpacingRule,
+    "if-leading-spacing": ifLeadingSpacingRule,
     "redundant-else-if": redundantElseIfRule,
 };

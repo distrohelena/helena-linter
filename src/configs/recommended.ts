@@ -31,6 +31,7 @@ export function createRecommendedConfig(
                 "@distrohelena/linter/exit-spacing": "error",
                 "@distrohelena/linter/if-else-if-chain": "error",
                 "@distrohelena/linter/if-following-spacing": "error",
+                "@distrohelena/linter/if-leading-spacing": "error",
                 "@distrohelena/linter/redundant-else-if": "error",
             },
         },

@@ -26,6 +26,7 @@ This enables the canonical Helena rule IDs:
 - `@distrohelena/linter/early-return`
 - `@distrohelena/linter/exit-spacing`
 - `@distrohelena/linter/if-else-if-chain`
+- `@distrohelena/linter/if-leading-spacing`
 - `@distrohelena/linter/if-following-spacing`
 - `@distrohelena/linter/redundant-else-if`
 
@@ -38,6 +39,7 @@ import declarationSpacingRule from "@distrohelena/linter/declaration-spacing";
 import earlyReturnRule from "@distrohelena/linter/early-return";
 import exitSpacingRule from "@distrohelena/linter/exit-spacing";
 import ifElseIfChainRule from "@distrohelena/linter/if-else-if-chain";
+import ifLeadingSpacingRule from "@distrohelena/linter/if-leading-spacing";
 import ifFollowingSpacingRule from "@distrohelena/linter/if-following-spacing";
 import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
 ```
@@ -56,6 +58,8 @@ import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
   Requires a blank line before `return`, `throw`, `break`, and `continue` statements.
 - `@distrohelena/linter/if-else-if-chain`
   Flags collapsed null checks and sibling `if` branches that should be written as `else if`.
+- `@distrohelena/linter/if-leading-spacing`
+  Requires a blank line before an `if` statement when it has a previous sibling statement.
 - `@distrohelena/linter/if-following-spacing`
   Requires a blank line after a completed `if` or `if / else if / else` chain before the next sibling statement.
 - `@distrohelena/linter/redundant-else-if`

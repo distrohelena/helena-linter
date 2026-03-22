@@ -1,6 +1,6 @@
 {
     "name": "@distrohelena/linter",
-    "version": "0.1.0",
+    "version": "0.3.0",
     "description": "Helena TypeScript lint rules for ESLint flat config.",
     "repository": {
         "type": "git",
@@ -41,6 +41,10 @@
         "./if-else-if-chain": {
             "types": "./dist/if-else-if-chain.d.ts",
             "import": "./dist/if-else-if-chain.js"
+        },
+        "./if-leading-spacing": {
+            "types": "./dist/if-leading-spacing.d.ts",
+            "import": "./dist/if-leading-spacing.js"
         },
         "./if-following-spacing": {
             "types": "./dist/if-following-spacing.d.ts",
