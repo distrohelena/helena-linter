@@ -29,6 +29,7 @@ This enables the canonical Helena rule IDs:
 - `@distrohelena/linter/if-else-if-chain`
 - `@distrohelena/linter/if-leading-spacing`
 - `@distrohelena/linter/if-following-spacing`
+- `@distrohelena/linter/multiline-block-layout`
 - `@distrohelena/linter/redundant-else-if`
 
 ## Per-Rule Imports
@@ -43,6 +44,7 @@ import exitSpacingRule from "@distrohelena/linter/exit-spacing";
 import ifElseIfChainRule from "@distrohelena/linter/if-else-if-chain";
 import ifLeadingSpacingRule from "@distrohelena/linter/if-leading-spacing";
 import ifFollowingSpacingRule from "@distrohelena/linter/if-following-spacing";
+import multilineBlockLayoutRule from "@distrohelena/linter/multiline-block-layout";
 import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
 ```
 
@@ -66,6 +68,8 @@ import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
   Requires a blank line before an `if` statement when it has a previous sibling statement.
 - `@distrohelena/linter/if-following-spacing`
   Requires a blank line after a completed `if` or `if / else if / else` chain before the next sibling statement.
+- `@distrohelena/linter/multiline-block-layout`
+  Requires non-empty block bodies to break across lines while allowing empty blocks to remain on one line.
 - `@distrohelena/linter/redundant-else-if`
   Flags `else if` branches that are just the exact complement of the previous `if`, which should be plain `else`.
 

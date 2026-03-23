@@ -54,6 +54,10 @@
             "types": "./dist/if-following-spacing.d.ts",
             "import": "./dist/if-following-spacing.js"
         },
+        "./multiline-block-layout": {
+            "types": "./dist/multiline-block-layout.d.ts",
+            "import": "./dist/multiline-block-layout.js"
+        },
         "./redundant-else-if": {
             "types": "./dist/redundant-else-if.d.ts",
             "import": "./dist/redundant-else-if.js"

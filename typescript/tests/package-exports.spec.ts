@@ -19,6 +19,7 @@ describe("package subpath exports", () => {
             "./if-else-if-chain": expect.any(Object),
             "./if-leading-spacing": expect.any(Object),
             "./if-following-spacing": expect.any(Object),
+            "./multiline-block-layout": expect.any(Object),
             "./redundant-else-if": expect.any(Object),
         });
     });

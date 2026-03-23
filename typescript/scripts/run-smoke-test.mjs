@@ -36,6 +36,7 @@ const requiredRuleIds = [
     "@distrohelena/linter/exit-spacing",
     "@distrohelena/linter/if-leading-spacing",
     "@distrohelena/linter/if-following-spacing",
+    "@distrohelena/linter/multiline-block-layout",
 ];
 const missingRuleIds = requiredRuleIds.filter(
     (ruleId) => !ruleIds.includes(ruleId),

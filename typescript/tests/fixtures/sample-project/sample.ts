@@ -13,6 +13,7 @@ export class Sample {
         if (!flag) {
             return values;
         }
+        try { return values; } catch {}
         while (flag)
             return values;
         const summary = values.join(",");
