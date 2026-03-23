@@ -41,6 +41,26 @@ public final class HelenaMessageIds {
     public static final String CONTROL_BLOCK_FOLLOWING_SPACING = "control-block-following-spacing";
 
     /**
+     * Identifies diagnostics that require a blank line after a local declaration.
+     */
+    public static final String DECLARATION_SPACING = "declaration-spacing";
+
+    /**
+     * Identifies diagnostics that require a blank line before a local declaration.
+     */
+    public static final String DECLARATION_LEADING_SPACING = "declaration-leading-spacing";
+
+    /**
+     * Identifies diagnostics that require a blank line before an exit statement.
+     */
+    public static final String EXIT_SPACING = "exit-spacing";
+
+    /**
+     * Identifies diagnostics that require a blank line before an {@code if} statement.
+     */
+    public static final String IF_LEADING_SPACING = "if-leading-spacing";
+
+    /**
      * Prevents direct instantiation.
      */
     private HelenaMessageIds() {
