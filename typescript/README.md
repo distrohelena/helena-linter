@@ -69,7 +69,8 @@ import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
 - `@distrohelena/linter/if-following-spacing`
   Requires a blank line after a completed `if` or `if / else if / else` chain before the next sibling statement.
 - `@distrohelena/linter/multiline-block-layout`
-  Requires non-empty block bodies to break across lines while allowing empty blocks to remain on one line.
+  Requires non-empty code blocks to break across lines. Empty blocks may remain on one line, and
+  object, collection, and anonymous initializer braces are excluded.
 - `@distrohelena/linter/redundant-else-if`
   Flags `else if` branches that are just the exact complement of the previous `if`, which should be plain `else`.
 
