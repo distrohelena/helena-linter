@@ -7,6 +7,12 @@ This workspace hosts Helena's Java lint rules as a Checkstyle extension jar.
 The package lives in `helena-linter-checkstyle` and is intended to be consumed as a local
 Checkstyle dependency during development or as a published artifact once the package is released.
 
+Published coordinates:
+
+```text
+dev.distrohelena:helena-linter-checkstyle:0.1.0
+```
+
 ## Gradle Usage
 
 Add the Helena Checkstyle jar to the `checkstyle` configuration and point Checkstyle at the bundled
@@ -40,6 +46,26 @@ java -cp "checkstyle-10.21.4-all.jar:helena-linter-checkstyle-0.1.0.jar" \
   -c helena-linter-checkstyle/src/main/resources/helena_checks.xml \
   samples/src/main/java
 ```
+
+## Publishing
+
+Create the publication artifacts:
+
+```bash
+./gradlew :helena-linter-checkstyle:publishToMavenLocal
+```
+
+The package now exposes a standard Maven publication named `mavenJava` with:
+- artifact id `helena-linter-checkstyle`
+- sources jar
+- javadoc jar
+- POM metadata pointing to the GitHub repository
+
+If you want to publish to a remote Maven repository later, add the target repository under the
+`publishing.repositories` block in `helena-linter-checkstyle/build.gradle.kts`.
+
+Before remote publication, add the real repository license metadata as well. The repo does not
+currently contain a `LICENSE` file, so the generated POM intentionally avoids claiming one.
 
 ## Full Rule List
 

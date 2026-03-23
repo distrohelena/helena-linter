@@ -1,9 +1,7 @@
 plugins {
     `java-library`
+    `maven-publish`
 }
-
-group = "dev.distrohelena"
-version = "0.1.0"
 
 val checkstyleVersion = "10.21.4"
 val junitVersion = "5.11.4"
@@ -23,4 +21,33 @@ dependencies {
 java {
     withSourcesJar()
     withJavadocJar()
+}
+
+publishing {
+    publications {
+        create<MavenPublication>("mavenJava") {
+            from(components["java"])
+
+            artifactId = "helena-linter-checkstyle"
+
+            pom {
+                name.set("Helena Linter Checkstyle")
+                description.set("Helena readability and control-flow Checkstyle rules for Java projects.")
+                url.set("https://github.com/distrohelena/helena-linter")
+
+                developers {
+                    developer {
+                        id.set("distrohelena")
+                        name.set("DistroHelena")
+                    }
+                }
+
+                scm {
+                    url.set("https://github.com/distrohelena/helena-linter")
+                    connection.set("scm:git:https://github.com/distrohelena/helena-linter.git")
+                    developerConnection.set("scm:git:ssh://git@github.com/distrohelena/helena-linter.git")
+                }
+            }
+        }
+    }
 }

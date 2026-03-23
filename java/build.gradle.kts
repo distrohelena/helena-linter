@@ -9,10 +9,12 @@ plugins {
 extra["helenaWorkspaceBuild"] = true
 
 val javaVersion = providers.gradleProperty("javaVersion").get().toInt()
+val projectGroup = providers.gradleProperty("projectGroup").get()
+val projectVersion = providers.gradleProperty("projectVersion").get()
 
 subprojects {
-    group = "dev.distrohelena"
-    version = "0.1.0"
+    group = projectGroup
+    version = projectVersion
 
     repositories {
         mavenCentral()
