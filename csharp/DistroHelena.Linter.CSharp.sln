@@ -1,0 +1,28 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistroHelena.Linter.CSharp", "DistroHelena.Linter.CSharp\DistroHelena.Linter.CSharp.csproj", "{97D8B394-9130-44FE-A4F6-9458A220228B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DistroHelena.Linter.CSharp.Tests", "DistroHelena.Linter.CSharp.Tests\DistroHelena.Linter.CSharp.Tests.csproj", "{BFFEE95B-821E-44DE-9A7E-033A69410F40}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{97D8B394-9130-44FE-A4F6-9458A220228B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{97D8B394-9130-44FE-A4F6-9458A220228B}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{97D8B394-9130-44FE-A4F6-9458A220228B}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{97D8B394-9130-44FE-A4F6-9458A220228B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BFFEE95B-821E-44DE-9A7E-033A69410F40}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BFFEE95B-821E-44DE-9A7E-033A69410F40}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BFFEE95B-821E-44DE-9A7E-033A69410F40}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BFFEE95B-821E-44DE-9A7E-033A69410F40}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

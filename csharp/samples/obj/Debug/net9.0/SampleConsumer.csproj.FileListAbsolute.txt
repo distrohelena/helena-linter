@@ -1,0 +1,15 @@
+/home/helena/dev/helena-linter/csharp/samples/bin/Debug/net9.0/SampleConsumer
+/home/helena/dev/helena-linter/csharp/samples/bin/Debug/net9.0/SampleConsumer.deps.json
+/home/helena/dev/helena-linter/csharp/samples/bin/Debug/net9.0/SampleConsumer.runtimeconfig.json
+/home/helena/dev/helena-linter/csharp/samples/bin/Debug/net9.0/SampleConsumer.dll
+/home/helena/dev/helena-linter/csharp/samples/bin/Debug/net9.0/SampleConsumer.pdb
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/SampleConsumer.GeneratedMSBuildEditorConfig.editorconfig
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/SampleConsumer.AssemblyInfoInputs.cache
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/SampleConsumer.AssemblyInfo.cs
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/SampleConsumer.csproj.CoreCompileInputs.cache
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/SampleConsumer.sourcelink.json
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/SampleConsumer.dll
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/refint/SampleConsumer.dll
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/SampleConsumer.pdb
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/SampleConsumer.genruntimeconfig.cache
+/home/helena/dev/helena-linter/csharp/samples/obj/Debug/net9.0/ref/SampleConsumer.dll

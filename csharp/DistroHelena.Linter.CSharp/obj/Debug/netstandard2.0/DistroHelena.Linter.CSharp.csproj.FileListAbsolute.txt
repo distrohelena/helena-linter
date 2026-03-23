@@ -1,0 +1,11 @@
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/bin/Debug/netstandard2.0/DistroHelena.Linter.CSharp.deps.json
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/bin/Debug/netstandard2.0/DistroHelena.Linter.CSharp.dll
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/bin/Debug/netstandard2.0/DistroHelena.Linter.CSharp.pdb
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/obj/Debug/netstandard2.0/DistroHelena.Linter.CSharp.csproj.AssemblyReference.cache
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/obj/Debug/netstandard2.0/DistroHelena.Linter.CSharp.GeneratedMSBuildEditorConfig.editorconfig
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/obj/Debug/netstandard2.0/DistroHelena.Linter.CSharp.AssemblyInfoInputs.cache
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/obj/Debug/netstandard2.0/DistroHelena.Linter.CSharp.AssemblyInfo.cs
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/obj/Debug/netstandard2.0/DistroHelena.Linter.CSharp.csproj.CoreCompileInputs.cache
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/obj/Debug/netstandard2.0/DistroHelena.Linter.CSharp.sourcelink.json
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/obj/Debug/netstandard2.0/DistroHelena.Linter.CSharp.dll
+/home/helena/dev/helena-linter/csharp/DistroHelena.Linter.CSharp/obj/Debug/netstandard2.0/DistroHelena.Linter.CSharp.pdb
