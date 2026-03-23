@@ -1,3 +1,4 @@
+import { controlBodyBracesRule } from "./control-body-braces-rule.js";
 import { controlBlockFollowingSpacingRule } from "./control-block-following-spacing-rule.js";
 import { declarationLeadingSpacingRule } from "./declaration-leading-spacing-rule.js";
 import { declarationSpacingRule } from "./declaration-spacing-rule.js";
@@ -12,6 +13,7 @@ import { redundantElseIfRule } from "./redundant-else-if-rule.js";
  * Collects all public Helena linter rules.
  */
 export const helenaRules = {
+    "control-body-braces": controlBodyBracesRule,
     "control-block-following-spacing": controlBlockFollowingSpacingRule,
     "declaration-leading-spacing": declarationLeadingSpacingRule,
     "declaration-spacing": declarationSpacingRule,

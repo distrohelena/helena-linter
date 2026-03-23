@@ -18,6 +18,10 @@
             "types": "./dist/index.d.ts",
             "import": "./dist/index.js"
         },
+        "./control-body-braces": {
+            "types": "./dist/control-body-braces.d.ts",
+            "import": "./dist/control-body-braces.js"
+        },
         "./control-block-following-spacing": {
             "types": "./dist/control-block-following-spacing.d.ts",
             "import": "./dist/control-block-following-spacing.js"

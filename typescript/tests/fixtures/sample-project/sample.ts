@@ -13,6 +13,8 @@ export class Sample {
         if (!flag) {
             return values;
         }
+        while (flag)
+            return values;
         const summary = values.join(",");
         return values;
     }

@@ -20,6 +20,7 @@ export default [...helenaLinter.configs.recommended];
 
 This enables the canonical Helena rule IDs:
 
+- `@distrohelena/linter/control-body-braces`
 - `@distrohelena/linter/control-block-following-spacing`
 - `@distrohelena/linter/declaration-leading-spacing`
 - `@distrohelena/linter/declaration-spacing`
@@ -33,6 +34,7 @@ This enables the canonical Helena rule IDs:
 ## Per-Rule Imports
 
 ```ts
+import controlBodyBracesRule from "@distrohelena/linter/control-body-braces";
 import controlBlockFollowingSpacingRule from "@distrohelena/linter/control-block-following-spacing";
 import declarationLeadingSpacingRule from "@distrohelena/linter/declaration-leading-spacing";
 import declarationSpacingRule from "@distrohelena/linter/declaration-spacing";
@@ -46,6 +48,8 @@ import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
 
 ## Included Rules
 
+- `@distrohelena/linter/control-body-braces`
+  Requires braces for `if`, `else`, `for`, `for...in`, `for...of`, `while`, and `do...while` bodies.
 - `@distrohelena/linter/control-block-following-spacing`
   Requires a blank line after a completed `for`, `while`, `do`, `switch`, or `try` statement before the next sibling statement.
 - `@distrohelena/linter/declaration-leading-spacing`

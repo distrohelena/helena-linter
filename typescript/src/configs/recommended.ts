@@ -24,6 +24,7 @@ export function createRecommendedConfig(
                 >[string],
             },
             rules: {
+                "@distrohelena/linter/control-body-braces": "error",
                 "@distrohelena/linter/control-block-following-spacing": "error",
                 "@distrohelena/linter/declaration-leading-spacing": "error",
                 "@distrohelena/linter/declaration-spacing": "error",

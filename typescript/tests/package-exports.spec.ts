@@ -10,6 +10,7 @@ const packageJson = JSON.parse(readFileSync(packageJsonPath, "utf8")) as {
 describe("package subpath exports", () => {
     it("publishes explicit root-level rule subpaths", () => {
         expect(packageJson.exports).toMatchObject({
+            "./control-body-braces": expect.any(Object),
             "./control-block-following-spacing": expect.any(Object),
             "./declaration-leading-spacing": expect.any(Object),
             "./declaration-spacing": expect.any(Object),
