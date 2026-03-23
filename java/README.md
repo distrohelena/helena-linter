@@ -25,6 +25,10 @@ checkstyle {
 The sample consumer in `samples/` uses the same setup with a copied ruleset at
 `samples/config/checkstyle/checkstyle.xml`.
 
+The sample source intentionally violates multiple Helena rules, so
+`./gradlew :samples:checkstyleMain` is expected to fail and print Helena diagnostics. That task is
+the end-to-end proof that the bundled ruleset and sample wiring work.
+
 ## Raw Checkstyle Usage
 
 If you run Checkstyle directly, put both the Checkstyle distribution and the Helena jar on the
