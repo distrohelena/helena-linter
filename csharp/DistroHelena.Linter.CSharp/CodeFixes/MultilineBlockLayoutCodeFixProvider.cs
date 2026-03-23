@@ -81,8 +81,8 @@ public sealed class MultilineBlockLayoutCodeFixProvider : CodeFixProvider
             return document;
         }
 
-        string updatedBlockText = CreateMultilineBlockText(block, sourceText);
-        BlockSyntax updatedBlock = (BlockSyntax)SyntaxFactory.ParseStatement(updatedBlockText)
+        string endOfLineText = GetEndOfLineText(sourceText);
+        BlockSyntax updatedBlock = CreateMultilineBlock(block, endOfLineText)
             .WithAdditionalAnnotations(Formatter.Annotation);
 
         SyntaxNode updatedRoot = root.ReplaceNode(block, updatedBlock);
@@ -91,42 +91,101 @@ public sealed class MultilineBlockLayoutCodeFixProvider : CodeFixProvider
     }
 
     /// <summary>
-    /// Builds the multiline text used to replace a single-line block.
+    /// Rewrites a single-line block into a multiline block while preserving trivia.
     /// </summary>
     /// <param name="block">The block being rewritten.</param>
-    /// <param name="sourceText">The current document text.</param>
-    /// <returns>The multiline block text.</returns>
-    private static string CreateMultilineBlockText(BlockSyntax block, SourceText sourceText)
+    /// <param name="endOfLineText">The line-ending text used by the current document.</param>
+    /// <returns>The rewritten block syntax.</returns>
+    private static BlockSyntax CreateMultilineBlock(BlockSyntax block, string endOfLineText)
     {
-        string source = sourceText.ToString();
-        string newline = source.IndexOf("\r\n", System.StringComparison.Ordinal) >= 0 ? "\r\n" : "\n";
-        string outerIndentation = GetLineIndentation(block.SpanStart, sourceText);
-        string innerIndentation = outerIndentation + "    ";
-        int innerStart = block.OpenBraceToken.Span.End;
-        int innerLength = block.CloseBraceToken.SpanStart - innerStart;
-        string innerText = sourceText.ToString(TextSpan.FromBounds(innerStart, innerStart + innerLength)).Trim();
+        SyntaxTrivia endOfLineTrivia = SyntaxFactory.EndOfLine(endOfLineText);
+        SyntaxList<StatementSyntax> updatedStatements = SyntaxFactory.List(
+            block.Statements.Select((statement, index) =>
+                index < block.Statements.Count - 1
+                    ? AppendEndOfLine(statement, endOfLineTrivia)
+                    : statement));
 
-        return $"{outerIndentation}{{{newline}{innerIndentation}{innerText}{newline}{outerIndentation}}}";
+        return block
+            .WithOpenBraceToken(AppendEndOfLine(block.OpenBraceToken, endOfLineTrivia))
+            .WithStatements(updatedStatements)
+            .WithCloseBraceToken(PrependEndOfLine(block.CloseBraceToken, endOfLineTrivia));
     }
 
     /// <summary>
-    /// Resolves the indentation used at the start of the line containing the supplied position.
+    /// Appends a line break to the trailing trivia of a statement when one is not already present.
     /// </summary>
-    /// <param name="position">The absolute source position.</param>
-    /// <param name="sourceText">The current document text.</param>
-    /// <returns>The whitespace prefix for the containing line.</returns>
-    private static string GetLineIndentation(int position, SourceText sourceText)
+    /// <param name="statement">The statement to update.</param>
+    /// <param name="endOfLineTrivia">The line-ending trivia to append.</param>
+    /// <returns>The updated statement.</returns>
+    private static StatementSyntax AppendEndOfLine(StatementSyntax statement, SyntaxTrivia endOfLineTrivia)
     {
-        TextLine line = sourceText.Lines.GetLineFromPosition(position);
-        string lineText = sourceText.ToString(TextSpan.FromBounds(line.Start, position));
-
-        int indentationLength = 0;
-
-        while (indentationLength < lineText.Length && char.IsWhiteSpace(lineText[indentationLength]))
+        if (HasEndOfLine(statement.GetTrailingTrivia()))
         {
-            indentationLength++;
+            return statement;
         }
 
-        return lineText.Substring(0, indentationLength);
+        return statement.WithTrailingTrivia(statement.GetTrailingTrivia().Add(endOfLineTrivia));
+    }
+
+    /// <summary>
+    /// Appends a line break to the trailing trivia of a syntax token when one is not already present.
+    /// </summary>
+    /// <param name="token">The token to update.</param>
+    /// <param name="endOfLineTrivia">The line-ending trivia to append.</param>
+    /// <returns>The updated token.</returns>
+    private static SyntaxToken AppendEndOfLine(SyntaxToken token, SyntaxTrivia endOfLineTrivia)
+    {
+        if (HasEndOfLine(token.TrailingTrivia))
+        {
+            return token;
+        }
+
+        return token.WithTrailingTrivia(token.TrailingTrivia.Add(endOfLineTrivia));
+    }
+
+    /// <summary>
+    /// Prepends a line break to the leading trivia of a syntax token when one is not already present.
+    /// </summary>
+    /// <param name="token">The token to update.</param>
+    /// <param name="endOfLineTrivia">The line-ending trivia to prepend.</param>
+    /// <returns>The updated token.</returns>
+    private static SyntaxToken PrependEndOfLine(SyntaxToken token, SyntaxTrivia endOfLineTrivia)
+    {
+        if (HasEndOfLine(token.LeadingTrivia))
+        {
+            return token;
+        }
+
+        return token.WithLeadingTrivia(token.LeadingTrivia.Insert(0, endOfLineTrivia));
+    }
+
+    /// <summary>
+    /// Determines whether a trivia list already contains a line break.
+    /// </summary>
+    /// <param name="triviaList">The trivia list to inspect.</param>
+    /// <returns><c>true</c> when the trivia list already includes an end-of-line marker; otherwise <c>false</c>.</returns>
+    private static bool HasEndOfLine(SyntaxTriviaList triviaList)
+    {
+        foreach (SyntaxTrivia trivia in triviaList)
+        {
+            if (trivia.IsKind(SyntaxKind.EndOfLineTrivia))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /// <summary>
+    /// Resolves the line-ending text used by the current source file.
+    /// </summary>
+    /// <param name="sourceText">The current document text.</param>
+    /// <returns>The line-ending string to preserve the file's newline style.</returns>
+    private static string GetEndOfLineText(SourceText sourceText)
+    {
+        string source = sourceText.ToString();
+
+        return source.IndexOf("\r\n", System.StringComparison.Ordinal) >= 0 ? "\r\n" : "\n";
     }
 }

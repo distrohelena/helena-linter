@@ -117,6 +117,95 @@ public class MultilineBlockLayoutAnalyzerTests
     }
 
     /// <summary>
+    /// Verifies the code fix preserves trailing comments attached to the closing brace.
+    /// </summary>
+    [Fact]
+    public async Task VerifyCodeFixAsync_PreservesTrailingCommentAfterBlock()
+    {
+        const string source = """
+            class Sample
+            {
+                void Run()
+                {
+                    if (true) {|#0:{|} Foo(); } // keep
+                }
+
+                void Foo()
+                {
+                }
+            }
+            """;
+
+        const string fixedSource = """
+            class Sample
+            {
+                void Run()
+                {
+                    if (true)
+                    {
+                        Foo();
+                    } // keep
+                }
+
+                void Foo()
+                {
+                }
+            }
+            """;
+
+        await VerifyCS.VerifyCodeFixAsync(
+            source,
+            VerifyCS.Diagnostic(HelenaDiagnosticDescriptors.MultilineBlockLayout).WithLocation(0),
+            fixedSource);
+    }
+
+    /// <summary>
+    /// Verifies the code fix splits multiple statements onto separate lines inside a block.
+    /// </summary>
+    [Fact]
+    public async Task VerifyCodeFixAsync_SplitsMultipleStatementsOntoSeparateLines()
+    {
+        const string source = """
+            class Sample
+            {
+                void Run() {|#0:{|} Foo(); Bar(); }
+
+                void Foo()
+                {
+                }
+
+                void Bar()
+                {
+                }
+            }
+            """;
+
+        const string fixedSource = """
+            class Sample
+            {
+                void Run()
+                {
+                    Foo();
+                    Bar();
+                }
+
+                void Foo()
+                {
+                }
+
+                void Bar()
+                {
+                }
+            }
+            """;
+
+        await VerifyCS.VerifyCodeFixAsync(
+            source,
+            VerifyCS.Diagnostic(HelenaDiagnosticDescriptors.MultilineBlockLayout).WithLocation(0),
+            fixedSource);
+    }
+
+    /// <summary>
     /// Verifies blocks that are already multiline or empty remain valid.
     /// </summary>
     [Fact]
