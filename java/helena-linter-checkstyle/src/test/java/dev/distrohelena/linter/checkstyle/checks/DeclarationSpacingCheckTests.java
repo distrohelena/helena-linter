@@ -23,7 +23,7 @@ class DeclarationSpacingCheckTests {
         String source = CheckstyleCheckTestSupport.readResource("/samples/declaration-spacing/invalid.java");
         SortedSet<Violation> violations = CheckstyleCheckTestSupport.runCheck(new DeclarationSpacingCheck(), source);
 
-        assertEquals(List.of(3, 4), CheckstyleCheckTestSupport.violationLines(violations));
+        assertEquals(List.of(3, 4, 9), CheckstyleCheckTestSupport.violationLines(violations));
     }
 
     /**

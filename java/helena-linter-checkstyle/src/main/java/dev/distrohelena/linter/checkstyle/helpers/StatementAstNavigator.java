@@ -80,6 +80,23 @@ public final class StatementAstNavigator {
     }
 
     /**
+     * Determines whether the supplied AST node can contain adjacent executable statements that
+     * participate in Helena spacing rules.
+     *
+     * @param node the container node to inspect.
+     * @return {@code true} when the node is a supported sibling-statement container.
+     */
+    public static boolean isStatementContainer(DetailAST node) {
+        if (node == null) {
+            return false;
+        }
+
+        int tokenType = node.getType();
+
+        return tokenType == TokenTypes.SLIST || tokenType == TokenTypes.CASE_GROUP;
+    }
+
+    /**
      * Resolves the last structural descendant reachable from the supplied AST node.
      *
      * <p>The helper follows the final child repeatedly until it reaches the terminal token that

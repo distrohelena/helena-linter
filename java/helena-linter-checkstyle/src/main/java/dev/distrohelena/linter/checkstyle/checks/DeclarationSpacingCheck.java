@@ -61,7 +61,7 @@ public final class DeclarationSpacingCheck extends AbstractCheck {
 
         if (parent == null) {
             return;
-        } else if (parent.getType() != TokenTypes.SLIST) {
+        } else if (!StatementAstNavigator.isStatementContainer(parent)) {
             return;
         }
 

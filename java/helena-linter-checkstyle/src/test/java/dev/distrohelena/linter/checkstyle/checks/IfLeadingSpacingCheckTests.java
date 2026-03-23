@@ -23,7 +23,7 @@ class IfLeadingSpacingCheckTests {
         String source = CheckstyleCheckTestSupport.readResource("/samples/if-leading-spacing/invalid.java");
         SortedSet<Violation> violations = CheckstyleCheckTestSupport.runCheck(new IfLeadingSpacingCheck(), source);
 
-        assertEquals(List.of(4), CheckstyleCheckTestSupport.violationLines(violations));
+        assertEquals(List.of(4, 11), CheckstyleCheckTestSupport.violationLines(violations));
     }
 
     /**

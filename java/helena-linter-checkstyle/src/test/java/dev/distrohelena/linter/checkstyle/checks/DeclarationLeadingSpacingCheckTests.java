@@ -23,7 +23,7 @@ class DeclarationLeadingSpacingCheckTests {
         String source = CheckstyleCheckTestSupport.readResource("/samples/declaration-leading-spacing/invalid.java");
         SortedSet<Violation> violations = CheckstyleCheckTestSupport.runCheck(new DeclarationLeadingSpacingCheck(), source);
 
-        assertEquals(List.of(4), CheckstyleCheckTestSupport.violationLines(violations));
+        assertEquals(List.of(4, 10), CheckstyleCheckTestSupport.violationLines(violations));
     }
 
     /**

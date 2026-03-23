@@ -63,7 +63,7 @@ public final class IfLeadingSpacingCheck extends AbstractCheck {
             return;
         } else if (parent.getType() == TokenTypes.LITERAL_ELSE) {
             return;
-        } else if (parent.getType() != TokenTypes.SLIST) {
+        } else if (!StatementAstNavigator.isStatementContainer(parent)) {
             return;
         }
 
