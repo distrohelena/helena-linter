@@ -61,7 +61,7 @@ public final class IfElseIfChainCheck extends AbstractCheck {
 
         if (parent == null) {
             return;
-        } else if (parent.getType() != TokenTypes.SLIST) {
+        } else if (!StatementAstNavigator.isStatementContainer(parent)) {
             return;
         }
 
@@ -69,10 +69,36 @@ public final class IfElseIfChainCheck extends AbstractCheck {
 
         if (previousSibling == null) {
             return;
-        } else if (!ControlFlowExitAnalyzer.doesStatementDefinitelyExit(previousSibling)) {
+        } else if (previousSibling.getType() != TokenTypes.LITERAL_IF) {
+            return;
+        } else if (previousSibling.findFirstToken(TokenTypes.LITERAL_ELSE) != null) {
+            return;
+        }
+
+        DetailAST thenBranch = findThenBranch(previousSibling);
+
+        if (thenBranch == null) {
+            return;
+        } else if (!ControlFlowExitAnalyzer.doesStatementDefinitelyExit(thenBranch)) {
             return;
         }
 
         log(ast, HelenaMessageIds.IF_ELSE_IF_CHAIN);
+    }
+
+    /**
+     * Locates the then-branch that follows the condition portion of an {@code if} statement.
+     *
+     * @param ifStatement the {@code if} statement to inspect.
+     * @return the first branch statement beneath the {@code if} node, or {@code null} when absent.
+     */
+    private static DetailAST findThenBranch(DetailAST ifStatement) {
+        DetailAST rightParen = ifStatement.findFirstToken(TokenTypes.RPAREN);
+
+        if (rightParen == null) {
+            return null;
+        }
+
+        return StatementAstNavigator.getNextSibling(rightParen);
     }
 }

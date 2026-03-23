@@ -68,8 +68,10 @@ class IfElseIfChainCheckTests {
         return Stream.of(
                 Arguments.of("""
                         class IfElseIfChainReturnSample {
-                            void test(boolean otherFlag) {
-                                return;
+                            void test(boolean flag, boolean otherFlag) {
+                                if (flag) {
+                                    return;
+                                }
                                 if (otherFlag) {
                                     work();
                                 }
@@ -78,11 +80,13 @@ class IfElseIfChainCheckTests {
                             void work() {
                             }
                         }
-                        """, 4),
+                        """, 6),
                 Arguments.of("""
                         class IfElseIfChainThrowSample {
-                            void test(boolean otherFlag) {
-                                throw new IllegalStateException();
+                            void test(boolean flag, boolean otherFlag) {
+                                if (flag) {
+                                    throw new IllegalStateException();
+                                }
                                 if (otherFlag) {
                                     work();
                                 }
@@ -91,12 +95,14 @@ class IfElseIfChainCheckTests {
                             void work() {
                             }
                         }
-                        """, 4),
+                        """, 6),
                 Arguments.of("""
                         class IfElseIfChainBreakSample {
-                            void test(boolean otherFlag) {
+                            void test(boolean flag, boolean otherFlag) {
                                 while (true) {
-                                    break;
+                                    if (flag) {
+                                        break;
+                                    }
                                     if (otherFlag) {
                                         work();
                                     }
@@ -106,12 +112,14 @@ class IfElseIfChainCheckTests {
                             void work() {
                             }
                         }
-                        """, 5),
+                        """, 7),
                 Arguments.of("""
                         class IfElseIfChainContinueSample {
-                            void test(boolean otherFlag) {
+                            void test(boolean flag, boolean otherFlag) {
                                 while (true) {
-                                    continue;
+                                    if (flag) {
+                                        continue;
+                                    }
                                     if (otherFlag) {
                                         work();
                                     }
@@ -121,6 +129,6 @@ class IfElseIfChainCheckTests {
                             void work() {
                             }
                         }
-                        """, 5));
+                        """, 7));
     }
 }
