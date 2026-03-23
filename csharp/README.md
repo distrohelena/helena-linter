@@ -22,13 +22,14 @@ The analyzer package lives in `DistroHelena.Linter.CSharp` and is intended to be
   Inserts a blank line before local declarations that follow non-declaration statements.
 - `HLN007` `if-leading-spacing`
   Inserts a blank line before `if` statements that follow earlier sibling statements.
+- `HLN008` `if-else-if-chain`
+  Folds sibling `if` statements into an `else if` chain when the earlier branch definitely exits.
+- `HLN009` `early-return`
+  Rewrites supported `if` and `if / else` control-flow shapes into early-return guard clauses.
 
 ## Deferred Rules
 
-These TypeScript Helena rules are still pending for the C# package:
-
-- `if-else-if-chain`
-- `early-return`
+There are no remaining deferred Helena rules in the current C# package scope.
 
 ## Local Commands
 

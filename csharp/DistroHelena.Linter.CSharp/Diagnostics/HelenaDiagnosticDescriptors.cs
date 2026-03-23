@@ -64,6 +64,22 @@ public static class HelenaDiagnosticDescriptors
         messageFormat: "Add a blank line before this if statement");
 
     /// <summary>
+    /// Diagnostic for sibling <c>if</c> statements that should be folded into an <c>else if</c> chain.
+    /// </summary>
+    public static readonly DiagnosticDescriptor IfElseIfChain = CreateDescriptor(
+        id: "HLN008",
+        title: "Use else-if for sibling if statements",
+        messageFormat: "Fold this sibling if into an else-if chain");
+
+    /// <summary>
+    /// Diagnostic for control-flow patterns that should be rewritten as early-return guard clauses.
+    /// </summary>
+    public static readonly DiagnosticDescriptor EarlyReturn = CreateDescriptor(
+        id: "HLN009",
+        title: "Rewrite as early return",
+        messageFormat: "Rewrite this control flow as an early-return guard clause");
+
+    /// <summary>
     /// Creates a descriptor using Helena's shared defaults.
     /// </summary>
     /// <param name="id">The diagnostic identifier.</param>
