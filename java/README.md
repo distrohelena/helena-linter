@@ -83,6 +83,9 @@ If you want to publish to a remote Maven repository later, add the target reposi
   sibling statement.
 - `IfLeadingSpacingCheck` - requires a blank line before `if` statements that follow earlier
   sibling statements.
+- `MultilineBlockLayoutCheck` - requires non-empty code blocks to be written across multiple
+  lines. Empty blocks may remain single-line, and object, collection, and anonymous initializer
+  braces are excluded.
 - `RedundantElseIfCheck` - flags complementary `else if` branches that should be written as
   `else`.
 

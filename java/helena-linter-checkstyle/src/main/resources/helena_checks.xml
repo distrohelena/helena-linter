@@ -13,6 +13,7 @@
         <module name="dev.distrohelena.linter.checkstyle.checks.IfElseIfChainCheck"/>
         <module name="dev.distrohelena.linter.checkstyle.checks.IfFollowingSpacingCheck"/>
         <module name="dev.distrohelena.linter.checkstyle.checks.IfLeadingSpacingCheck"/>
+        <module name="dev.distrohelena.linter.checkstyle.checks.MultilineBlockLayoutCheck"/>
         <module name="dev.distrohelena.linter.checkstyle.checks.RedundantElseIfCheck"/>
     </module>
 </module>
