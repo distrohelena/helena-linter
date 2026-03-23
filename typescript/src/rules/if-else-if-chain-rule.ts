@@ -4,9 +4,7 @@ import { doesStatementAlwaysExit } from "../utils/control-flow-exit.js";
 import { getSpacingRangeBetweenStatements } from "../utils/line-spacing.js";
 import { createReportLoc } from "../utils/report-loc.js";
 import {
-    type NullishComparisonDetails,
     tryGetNullishComparisonDetails,
-    unwrapExpression,
 } from "../utils/expression-comparison.js";
 
 const createRule = ESLintUtils.RuleCreator(
@@ -78,7 +76,6 @@ export const ifElseIfChainRule = createRule({
                             continue;
                         }
 
-                        reportCollapsedViolation(statement);
                         reportSiblingViolation(
                             statement,
                             index + 1 < statements.length
@@ -86,139 +83,6 @@ export const ifElseIfChainRule = createRule({
                                 : undefined,
                         );
                     }
-                }
-
-                /**
-                 * Reports collapsed null-check violations.
-                 * @param statement Statement to inspect.
-                 */
-                function reportCollapsedViolation(
-                    statement: ts.IfStatement,
-                ): void {
-                    const condition = unwrapExpression(statement.expression);
-                    const position = sourceFile.getLineAndCharacterOfPosition(
-                        statement.expression.getStart(sourceFile),
-                    );
-                    const collapsedComparisons =
-                        tryGetCollapsedNullishComparisons(condition);
-
-                    if (collapsedComparisons === undefined) {
-                        return;
-                    }
-
-                    context.report({
-                        loc: createReportLoc(
-                            position.line + 1,
-                            position.character + 1,
-                        ),
-                        messageId: "ifElseIfChain",
-                        fix(fixer) {
-                            return fixer.replaceTextRange(
-                                [
-                                    statement.getStart(sourceFile),
-                                    statement.getEnd(),
-                                ],
-                                buildExpandedNullishChain(
-                                    collapsedComparisons,
-                                    statement.thenStatement,
-                                ),
-                            );
-                        },
-                    });
-                }
-
-                /**
-                 * Returns the supported nullish comparisons represented by a collapsed condition.
-                 * @param condition Condition to inspect.
-                 * @returns Ordered nullish comparisons when the condition can be expanded safely.
-                 */
-                function tryGetCollapsedNullishComparisons(
-                    condition: ts.Expression,
-                ):
-                    | [NullishComparisonDetails, NullishComparisonDetails]
-                    | undefined {
-                    const isLooseNullCheck =
-                        ts.isBinaryExpression(condition) &&
-                        condition.operatorToken.kind ===
-                            ts.SyntaxKind.EqualsEqualsToken &&
-                        tryGetNullishComparisonDetails(condition, sourceFile)
-                            ?.nullishKind === "null";
-
-                    if (isLooseNullCheck) {
-                        const looseComparison = tryGetNullishComparisonDetails(
-                            condition,
-                            sourceFile,
-                        );
-
-                        if (looseComparison === undefined) {
-                            return undefined;
-                        }
-
-                        return [
-                            {
-                                targetText: looseComparison.targetText,
-                                nullishKind: "null",
-                            },
-                            {
-                                targetText: looseComparison.targetText,
-                                nullishKind: "undefined",
-                            },
-                        ];
-                    } else if (
-                        !ts.isBinaryExpression(condition) ||
-                        condition.operatorToken.kind !==
-                            ts.SyntaxKind.BarBarToken
-                    ) {
-                        return undefined;
-                    }
-
-                    const leftComparison = tryGetNullishComparisonDetails(
-                        condition.left,
-                        sourceFile,
-                    );
-                    const rightComparison = tryGetNullishComparisonDetails(
-                        condition.right,
-                        sourceFile,
-                    );
-
-                    if (
-                        leftComparison === undefined ||
-                        rightComparison === undefined
-                    ) {
-                        return undefined;
-                    } else if (
-                        leftComparison.targetText !== rightComparison.targetText
-                    ) {
-                        return undefined;
-                    } else if (
-                        leftComparison.nullishKind ===
-                        rightComparison.nullishKind
-                    ) {
-                        return undefined;
-                    }
-
-                    return [leftComparison, rightComparison];
-                }
-
-                /**
-                 * Builds an explicit null / undefined if-else-if chain from a collapsed condition.
-                 * @param comparisons Ordered nullish comparisons to expand.
-                 * @param thenStatement Shared statement body for each branch.
-                 * @returns Expanded if-else-if chain source text.
-                 */
-                function buildExpandedNullishChain(
-                    comparisons: [
-                        NullishComparisonDetails,
-                        NullishComparisonDetails,
-                    ],
-                    thenStatement: ts.Statement,
-                ): string {
-                    const thenStatementText = sourceText.slice(
-                        thenStatement.getStart(sourceFile),
-                        thenStatement.getEnd(),
-                    );
-
-                    return `if (${comparisons[0].targetText} === ${comparisons[0].nullishKind}) ${thenStatementText} else if (${comparisons[1].targetText} === ${comparisons[1].nullishKind}) ${thenStatementText}`;
                 }
 
                 /**

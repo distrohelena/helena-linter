@@ -61,7 +61,7 @@ import redundantElseIfRule from "@distrohelena/linter/redundant-else-if";
 - `@distrohelena/linter/exit-spacing`
   Requires a blank line before `return`, `throw`, `break`, and `continue` statements.
 - `@distrohelena/linter/if-else-if-chain`
-  Flags collapsed null checks and sibling `if` branches that should be written as `else if`.
+  Flags sibling `if` branches that should be written as `else if`.
 - `@distrohelena/linter/if-leading-spacing`
   Requires a blank line before an `if` statement when it has a previous sibling statement.
 - `@distrohelena/linter/if-following-spacing`
