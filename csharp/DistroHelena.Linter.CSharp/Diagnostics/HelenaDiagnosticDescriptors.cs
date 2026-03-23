@@ -88,6 +88,14 @@ public static class HelenaDiagnosticDescriptors
         messageFormat: "Wrap this if body in braces");
 
     /// <summary>
+    /// Diagnostic for non-empty blocks that should be written across multiple lines.
+    /// </summary>
+    public static readonly DiagnosticDescriptor MultilineBlockLayout = CreateDescriptor(
+        id: "HLN011",
+        title: "Use multiline layout for non-empty blocks",
+        messageFormat: "Rewrite this non-empty block onto multiple lines");
+
+    /// <summary>
     /// Creates a descriptor using Helena's shared defaults.
     /// </summary>
     /// <param name="id">The diagnostic identifier.</param>

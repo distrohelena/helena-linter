@@ -14,6 +14,7 @@ Roslyn analyzers and code fixes for Helena’s C# readability rules.
 - `HLN008` if-else-if-chain
 - `HLN009` early-return
 - `HLN010` control-body-braces
+- `HLN011` multiline-block-layout
 
 ## Usage
 
@@ -34,3 +35,10 @@ Or reference the project directly as an analyzer during local development:
                     ReferenceOutputAssembly="false" />
 </ItemGroup>
 ```
+
+## Multiline Block Layout
+
+`HLN011` requires non-empty code blocks to be written across multiple lines.
+
+- Empty blocks may remain single-line.
+- Object, collection, and anonymous object initializer braces are excluded from this rule.

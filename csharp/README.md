@@ -28,6 +28,8 @@ The analyzer package lives in `DistroHelena.Linter.CSharp` and is intended to be
   Rewrites supported `if` and `if / else` control-flow shapes into early-return guard clauses.
 - `HLN010` `control-body-braces`
   Wraps single-statement control-flow bodies such as `if`, `else`, `for`, `foreach`, `while`, `do`, `using`, `lock`, and `fixed` in braces.
+- `HLN011` `multiline-block-layout`
+  Requires non-empty code blocks to use multiline layout. Empty blocks may remain single-line, and object, collection, and anonymous initializer braces are excluded.
 
 ## Deferred Rules
 
