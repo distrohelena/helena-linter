@@ -13,7 +13,7 @@ repositories {
 }
 
 dependencies {
-    implementation("com.puppycrawl.tools:checkstyle:$checkstyleVersion")
+    compileOnly("com.puppycrawl.tools:checkstyle:$checkstyleVersion")
 
     testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter")
