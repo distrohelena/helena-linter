@@ -2,12 +2,22 @@ plugins {
     `java-library`
 }
 
-dependencies {
-    implementation("com.puppycrawl.tools:checkstyle:${providers.gradleProperty("checkstyleVersion").get()}")
+group = "dev.distrohelena"
+version = "0.1.0"
 
-    testImplementation(platform("org.junit:junit-bom:${providers.gradleProperty("junitVersion").get()}"))
+val checkstyleVersion = "10.21.4"
+val junitVersion = "5.11.4"
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation("com.puppycrawl.tools:checkstyle:$checkstyleVersion")
+
+    testImplementation(platform("org.junit:junit-bom:$junitVersion"))
     testImplementation("org.junit.jupiter:junit-jupiter")
-    testImplementation("com.puppycrawl.tools:checkstyle:${providers.gradleProperty("checkstyleVersion").get()}")
+    testImplementation("com.puppycrawl.tools:checkstyle:$checkstyleVersion")
 }
 
 java {

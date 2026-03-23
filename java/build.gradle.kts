@@ -6,6 +6,8 @@ plugins {
     base
 }
 
+extra["helenaWorkspaceBuild"] = true
+
 val javaVersion = providers.gradleProperty("javaVersion").get().toInt()
 
 subprojects {
