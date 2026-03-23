@@ -80,6 +80,14 @@ public static class HelenaDiagnosticDescriptors
         messageFormat: "Rewrite this control flow as an early-return guard clause");
 
     /// <summary>
+    /// Diagnostic for <c>if</c>, <c>else if</c>, and <c>else</c> bodies that should be wrapped in braces.
+    /// </summary>
+    public static readonly DiagnosticDescriptor IfBodyBraces = CreateDescriptor(
+        id: "HLN010",
+        title: "Add braces to if bodies",
+        messageFormat: "Wrap this if body in braces");
+
+    /// <summary>
     /// Creates a descriptor using Helena's shared defaults.
     /// </summary>
     /// <param name="id">The diagnostic identifier.</param>

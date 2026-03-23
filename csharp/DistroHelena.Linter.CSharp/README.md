@@ -13,6 +13,7 @@ Roslyn analyzers and code fixes for Helena’s C# readability rules.
 - `HLN007` if-leading spacing
 - `HLN008` if-else-if-chain
 - `HLN009` early-return
+- `HLN010` control-body-braces
 
 ## Usage
 

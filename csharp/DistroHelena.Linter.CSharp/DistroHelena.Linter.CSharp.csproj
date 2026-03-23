@@ -7,6 +7,7 @@
     <IsPackable>true</IsPackable>
     <IncludeBuildOutput>false</IncludeBuildOutput>
     <PackageId>DistroHelena.Linter.CSharp</PackageId>
+    <Version>0.1.0</Version>
     <Title>DistroHelena.Linter.CSharp</Title>
     <Description>Helena C# Roslyn analyzers and code fixes.</Description>
     <PackageTags>roslyn;analyzers;csharp;dotnet;formatting</PackageTags>
@@ -15,7 +16,7 @@
     <RepositoryType>git</RepositoryType>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <NoWarn>$(NoWarn);RS1038;RS2008</NoWarn>
+    <NoWarn>$(NoWarn);RS1038;RS2008;NU5128</NoWarn>
     <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
   </PropertyGroup>
 

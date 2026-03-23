@@ -26,6 +26,8 @@ The analyzer package lives in `DistroHelena.Linter.CSharp` and is intended to be
   Folds sibling `if` statements into an `else if` chain when the earlier branch definitely exits.
 - `HLN009` `early-return`
   Rewrites supported `if` and `if / else` control-flow shapes into early-return guard clauses.
+- `HLN010` `control-body-braces`
+  Wraps single-statement control-flow bodies such as `if`, `else`, `for`, `foreach`, `while`, `do`, `using`, `lock`, and `fixed` in braces.
 
 ## Deferred Rules
 
