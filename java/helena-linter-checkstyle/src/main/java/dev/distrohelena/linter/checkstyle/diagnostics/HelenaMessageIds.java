@@ -66,6 +66,11 @@ public final class HelenaMessageIds {
     public static final String EXIT_SPACING = "exit-spacing";
 
     /**
+     * Identifies diagnostics that report a supported early-return guard-clause opportunity.
+     */
+    public static final String EARLY_RETURN = "early-return";
+
+    /**
      * Identifies diagnostics that require a blank line before an {@code if} statement.
      */
     public static final String IF_LEADING_SPACING = "if-leading-spacing";
