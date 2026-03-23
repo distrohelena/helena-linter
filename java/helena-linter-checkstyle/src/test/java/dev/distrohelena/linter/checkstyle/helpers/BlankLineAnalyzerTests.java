@@ -46,6 +46,30 @@ class BlankLineAnalyzerTests {
     }
 
     /**
+     * Confirms that a blank line after a statement is detected with Checkstyle's zero-based file
+     * line indexing.
+     *
+     * @throws Exception when the source cannot be parsed for the test fixture.
+     */
+    @Test
+    void shouldDetectBlankLineAfterStatement() throws Exception {
+        FileContents fileContents = parseFileContents("""
+                class Test {
+                    void test() {
+                        first();
+
+                        second();
+                    }
+                }
+                """);
+        DetailAST methodBody = findFirstToken(parseCompilationUnit(fileContents), TokenTypes.METHOD_DEF)
+                .findFirstToken(TokenTypes.SLIST);
+        DetailAST firstStatement = findFirstStatementChild(methodBody);
+
+        assertTrue(BlankLineAnalyzer.hasBlankLineAfter(firstStatement, fileContents));
+    }
+
+    /**
      * Parses the supplied Java source into Checkstyle file contents.
      *
      * @param source the Java source used for the test fixture.

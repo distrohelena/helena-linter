@@ -80,6 +80,30 @@ public final class StatementAstNavigator {
     }
 
     /**
+     * Resolves the last structural descendant reachable from the supplied AST node.
+     *
+     * <p>The helper follows the final child repeatedly until it reaches the terminal token that
+     * closes the statement subtree, which is useful for spacing rules that need to anchor on the
+     * end of a compound control statement.</p>
+     *
+     * @param node the node whose terminal descendant should be resolved.
+     * @return the deepest last-child node, or {@code null} when the input node is {@code null}.
+     */
+    public static DetailAST getLastDescendant(DetailAST node) {
+        if (node == null) {
+            return null;
+        }
+
+        DetailAST current = node;
+
+        while (current.getLastChild() != null) {
+            current = current.getLastChild();
+        }
+
+        return current;
+    }
+
+    /**
      * Determines whether the supplied AST node represents a hidden comment node.
      *
      * @param node the node to inspect.

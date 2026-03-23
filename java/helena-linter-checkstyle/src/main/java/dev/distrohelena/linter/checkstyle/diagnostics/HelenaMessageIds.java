@@ -26,6 +26,21 @@ public final class HelenaMessageIds {
     public static final String CONTROL_FLOW_EXIT = "control-flow-exit";
 
     /**
+     * Identifies diagnostics that require braces around an executable control body.
+     */
+    public static final String CONTROL_BODY_BRACES = "control-body-braces";
+
+    /**
+     * Identifies diagnostics that require a blank line after an {@code if} chain.
+     */
+    public static final String IF_FOLLOWING_SPACING = "if-following-spacing";
+
+    /**
+     * Identifies diagnostics that require a blank line after a non-{@code if} control block.
+     */
+    public static final String CONTROL_BLOCK_FOLLOWING_SPACING = "control-block-following-spacing";
+
+    /**
      * Prevents direct instantiation.
      */
     private HelenaMessageIds() {

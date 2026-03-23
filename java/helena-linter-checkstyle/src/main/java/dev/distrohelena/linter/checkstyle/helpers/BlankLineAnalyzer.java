@@ -40,7 +40,7 @@ public final class BlankLineAnalyzer {
         }
 
         for (int line = previousEndLine + 1; line < nextStartLine; line++) {
-            if (fileContents.lineIsBlank(line)) {
+            if (fileContents.lineIsBlank(line - 1)) {
                 return true;
             }
         }
@@ -71,11 +71,25 @@ public final class BlankLineAnalyzer {
      * @return {@code true} when a blank line exists after the statement; otherwise {@code false}.
      */
     public static boolean hasBlankLineAfter(DetailAST statement, FileContents fileContents) {
-        if (statement == null) {
+        if (statement == null || fileContents == null) {
             return false;
         }
 
-        return hasBlankLineBetween(statement, StatementAstNavigator.getNextSibling(statement), fileContents);
+        int endLine = getEndLine(statement);
+        String[] lines = fileContents.getLines();
+        boolean sawBlankLine = false;
+
+        for (int line = endLine + 1; line <= lines.length; line++) {
+            if (fileContents.lineIsBlank(line - 1)) {
+                sawBlankLine = true;
+            } else if (fileContents.lineIsComment(line - 1)) {
+                continue;
+            } else {
+                return sawBlankLine;
+            }
+        }
+
+        return false;
     }
 
     /**
