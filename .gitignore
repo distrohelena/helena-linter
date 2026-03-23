@@ -1,2 +1,4 @@
 csharp/**/bin/
 csharp/**/obj/
+java/.gradle/
+java/**/build/
