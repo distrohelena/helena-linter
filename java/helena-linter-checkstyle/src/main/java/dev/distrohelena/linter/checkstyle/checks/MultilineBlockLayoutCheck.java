@@ -6,7 +6,7 @@ import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import dev.distrohelena.linter.checkstyle.diagnostics.HelenaMessageIds;
 
 /**
- * Requires non-empty Java code blocks to use multiline layout.
+ * Requires non-empty Java code blocks with executable content to use multiline layout.
  */
 public final class MultilineBlockLayoutCheck extends AbstractCheck {
 
@@ -55,7 +55,7 @@ public final class MultilineBlockLayoutCheck extends AbstractCheck {
      */
     @Override
     public void visitToken(DetailAST ast) {
-        if (ast.getType() != TokenTypes.SLIST || isEmptyBlock(ast) || !isSingleLineBlock(ast)) {
+        if (ast.getType() != TokenTypes.SLIST || !hasExecutableContent(ast) || !isSingleLineBlock(ast)) {
             return;
         }
 
@@ -63,15 +63,19 @@ public final class MultilineBlockLayoutCheck extends AbstractCheck {
     }
 
     /**
-     * Determines whether the supplied block contains at least one statement.
+     * Determines whether the supplied block contains executable content.
      *
      * @param block the block being inspected.
-     * @return {@code true} when the block is empty; otherwise {@code false}.
+     * @return {@code true} when the block contains at least one real statement; otherwise {@code false}.
      */
-    private static boolean isEmptyBlock(DetailAST block) {
-        DetailAST firstChild = block.getFirstChild();
+    private static boolean hasExecutableContent(DetailAST block) {
+        for (DetailAST child = block.getFirstChild(); child != null; child = child.getNextSibling()) {
+            if (!isIgnorableBlockChild(child)) {
+                return true;
+            }
+        }
 
-        return firstChild == null || firstChild.getType() == TokenTypes.RCURLY;
+        return false;
     }
 
     /**
@@ -88,5 +92,24 @@ public final class MultilineBlockLayoutCheck extends AbstractCheck {
         }
 
         return block.getLineNo() == rightBrace.getLineNo();
+    }
+
+    /**
+     * Determines whether a block child is structural noise instead of executable content.
+     *
+     * @param node the child node to inspect.
+     * @return {@code true} when the node should be ignored while checking for content; otherwise {@code false}.
+     */
+    private static boolean isIgnorableBlockChild(DetailAST node) {
+        int tokenType = node.getType();
+
+        return tokenType == TokenTypes.LCURLY
+                || tokenType == TokenTypes.RCURLY
+                || tokenType == TokenTypes.SEMI
+                || tokenType == TokenTypes.EMPTY_STAT
+                || tokenType == TokenTypes.SINGLE_LINE_COMMENT
+                || tokenType == TokenTypes.BLOCK_COMMENT_BEGIN
+                || tokenType == TokenTypes.BLOCK_COMMENT_END
+                || tokenType == TokenTypes.COMMENT_CONTENT;
     }
 }

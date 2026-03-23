@@ -27,7 +27,7 @@ class MultilineBlockLayoutCheckTests {
     }
 
     /**
-     * Confirms that multiline blocks, empty blocks, and initializer braces remain valid.
+     * Confirms that multiline blocks, empty blocks, comment-only blocks, and initializer braces remain valid.
      *
      * @throws Exception when the sample cannot be read or parsed.
      */

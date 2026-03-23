@@ -5,6 +5,10 @@ class Test {
 
     void emptyMethodCase() {}
 
+    void commentOnlyCase() {
+        // comment-only blocks are allowed
+    }
+
     void emptyIfCase(boolean flag) {
         if (flag) {}
     }
