@@ -4,6 +4,7 @@ plugins {
 }
 
 val workspaceBuild = rootProject.extensions.extraProperties.has("helenaWorkspaceBuild")
+val helenaCheckstyleConfig = file("config/checkstyle/checkstyle.xml")
 
 repositories {
     mavenCentral()
@@ -21,10 +22,12 @@ dependencies {
 
 checkstyle {
     toolVersion = "10.21.4"
-    configFile = if (workspaceBuild) {
-        rootProject.file("helena-linter-checkstyle/src/main/resources/helena_checks.xml")
-    } else {
-        rootProject.file("../helena-linter-checkstyle/src/main/resources/helena_checks.xml")
+    configFile = helenaCheckstyleConfig
+}
+
+tasks.named("checkstyleMain") {
+    onlyIf {
+        gradle.startParameter.taskNames.any { taskName -> taskName.endsWith("checkstyleMain") }
     }
 }
 

@@ -6,6 +6,8 @@ It currently contains:
 
 - [TypeScript package](./typescript/README.md): `@distrohelena/linter`
 - [C# package](./csharp/README.md): `DistroHelena.Linter.CSharp`
+- [Java package](./java/README.md): Helena Checkstyle rules packaged in
+  `helena-linter-checkstyle`
 
 ## Packages
 
@@ -42,6 +44,22 @@ Use it from a project with:
 ```
 
 See [csharp/README.md](./csharp/README.md) for the current rule list, local development commands, and sample-consumer guidance.
+
+### Java
+
+The Java package is published as the `helena-linter-checkstyle` Checkstyle extension jar and
+provides the Helena Java readability rules for Gradle, Maven, or raw Checkstyle consumers.
+
+Use it from a Gradle project with:
+
+```kotlin
+dependencies {
+  checkstyle(project(":helena-linter-checkstyle"))
+}
+```
+
+See [java/README.md](./java/README.md) for the full rule list, consumer instructions, and local
+verification commands.
 
 ## Repository Layout
 
