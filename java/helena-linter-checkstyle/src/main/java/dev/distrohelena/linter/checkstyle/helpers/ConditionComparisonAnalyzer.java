@@ -47,8 +47,8 @@ public final class ConditionComparisonAnalyzer {
                 continue;
             }
 
-            if (condition.getType() == TokenTypes.LPAREN && condition.getFirstChild() != null) {
-                condition = condition.getFirstChild();
+            if (condition.getType() == TokenTypes.LPAREN && condition.getNextSibling() != null) {
+                condition = condition.getNextSibling();
                 continue;
             }
 
@@ -67,9 +67,9 @@ public final class ConditionComparisonAnalyzer {
      */
     private static boolean isBooleanNegationPair(DetailAST firstCondition, DetailAST secondCondition) {
         if (firstCondition.getType() == TokenTypes.LNOT) {
-            return areEquivalent(firstCondition.getFirstChild(), secondCondition);
+            return areEquivalent(normalizeCondition(firstCondition.getFirstChild()), secondCondition);
         } else if (secondCondition.getType() == TokenTypes.LNOT) {
-            return areEquivalent(secondCondition.getFirstChild(), firstCondition);
+            return areEquivalent(normalizeCondition(secondCondition.getFirstChild()), firstCondition);
         }
 
         return false;

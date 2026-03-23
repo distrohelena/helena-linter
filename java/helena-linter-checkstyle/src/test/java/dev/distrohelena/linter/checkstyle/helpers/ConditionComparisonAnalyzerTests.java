@@ -75,6 +75,33 @@ class ConditionComparisonAnalyzerTests {
     }
 
     /**
+     * Confirms that a negation wrapped in parentheses still compares as the complementary branch.
+     *
+     * @throws Exception when the source cannot be parsed for the test fixture.
+     */
+    @Test
+    void shouldRecognizeParenthesizedBooleanNegationComparisons() throws Exception {
+        DetailAST negatedCondition = parseFirstIfCondition("""
+                class Test {
+                    void test(boolean flag) {
+                        if (!(flag)) {
+                        }
+                    }
+                }
+                """);
+        DetailAST positiveCondition = parseFirstIfCondition("""
+                class Test {
+                    void test(boolean flag) {
+                        if (flag) {
+                        }
+                    }
+                }
+                """);
+
+        assertTrue(ConditionComparisonAnalyzer.isComplementaryCondition(negatedCondition, positiveCondition));
+    }
+
+    /**
      * Confirms that unrelated comparison expressions are not treated as complements.
      *
      * @throws Exception when the source cannot be parsed for the test fixture.

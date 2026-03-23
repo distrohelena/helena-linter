@@ -72,7 +72,7 @@ public final class ControlFlowExitAnalyzer {
         }
 
         DetailAST thenBranch = findIfBranch(ifStatement);
-        DetailAST elseBranch = elseNode.getFirstChild();
+        DetailAST elseBranch = resolveBranchRoot(elseNode.getFirstChild());
 
         return doesStatementDefinitelyExit(thenBranch) && doesStatementDefinitelyExit(elseBranch);
     }
@@ -94,24 +94,39 @@ public final class ControlFlowExitAnalyzer {
             return null;
         }
 
-        DetailAST branch = StatementAstNavigator.getNextSibling(child);
+        return resolveBranchRoot(child.getNextSibling());
+    }
 
-        while (branch != null
-                && branch.getType() != TokenTypes.SLIST
-                && branch.getType() != TokenTypes.LITERAL_IF
-                && branch.getType() != TokenTypes.LITERAL_RETURN
-                && branch.getType() != TokenTypes.LITERAL_THROW
-                && branch.getType() != TokenTypes.LITERAL_BREAK
-                && branch.getType() != TokenTypes.LITERAL_CONTINUE
-                && branch.getType() != TokenTypes.LITERAL_FOR
-                && branch.getType() != TokenTypes.LITERAL_WHILE
-                && branch.getType() != TokenTypes.LITERAL_DO
-                && branch.getType() != TokenTypes.LITERAL_SWITCH
-                && branch.getType() != TokenTypes.LITERAL_TRY
-                && branch.getType() != TokenTypes.LITERAL_SYNCHRONIZED) {
-            branch = StatementAstNavigator.getNextSibling(branch);
+    /**
+     * Resolves the immediate statement root for a branch while skipping only punctuation and hidden nodes.
+     *
+     * @param branchCandidate the first sibling after the branch introducer.
+     * @return the first real branch node, or {@code null} when none exists.
+     */
+    private static DetailAST resolveBranchRoot(DetailAST branchCandidate) {
+        DetailAST branch = branchCandidate;
+
+        while (branch != null && isIgnorableBranchNode(branch)) {
+            branch = branch.getNextSibling();
         }
 
         return branch;
+    }
+
+    /**
+     * Determines whether a sibling node is structural noise instead of a statement root.
+     *
+     * @param node the sibling node to inspect.
+     * @return {@code true} when the node should be skipped during branch resolution; otherwise {@code false}.
+     */
+    private static boolean isIgnorableBranchNode(DetailAST node) {
+        int tokenType = node.getType();
+
+        return tokenType == TokenTypes.LPAREN
+                || tokenType == TokenTypes.RPAREN
+                || tokenType == TokenTypes.SINGLE_LINE_COMMENT
+                || tokenType == TokenTypes.BLOCK_COMMENT_BEGIN
+                || tokenType == TokenTypes.BLOCK_COMMENT_END
+                || tokenType == TokenTypes.COMMENT_CONTENT;
     }
 }

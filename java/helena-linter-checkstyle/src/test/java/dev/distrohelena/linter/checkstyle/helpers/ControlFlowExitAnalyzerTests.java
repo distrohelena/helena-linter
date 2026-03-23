@@ -1,6 +1,8 @@
 package dev.distrohelena.linter.checkstyle.helpers;
 
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import com.puppycrawl.tools.checkstyle.JavaParser;
@@ -10,6 +12,7 @@ import com.puppycrawl.tools.checkstyle.api.FileContents;
 import com.puppycrawl.tools.checkstyle.api.FileText;
 import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.stream.Stream;
 import org.junit.jupiter.params.ParameterizedTest;
@@ -80,6 +83,28 @@ class ControlFlowExitAnalyzerTests {
                 """), TokenTypes.METHOD_DEF).findFirstToken(TokenTypes.SLIST);
 
         assertFalse(ControlFlowExitAnalyzer.doesStatementDefinitelyExit(methodBody));
+    }
+
+    /**
+     * Confirms that a normal expression statement branch remains visible to the resolver.
+     *
+     * @throws Exception when the source cannot be parsed for the test fixture or the private helper cannot be invoked.
+     */
+    @Test
+    void shouldResolveExpressionStatementBranchWithoutSkippingIt() throws Exception {
+        DetailAST ifStatement = findFirstToken(parseCompilationUnit("""
+                class Test {
+                    void test(boolean flag) {
+                        if (flag) foo();
+                        else return;
+                    }
+                }
+                """), TokenTypes.LITERAL_IF);
+
+        DetailAST thenBranch = invokeFindIfBranch(ifStatement);
+
+        assertNotNull(thenBranch);
+        assertEquals(TokenTypes.EXPR, thenBranch.getType(), "resolved branch type was " + thenBranch.getType());
     }
 
     /**
@@ -157,5 +182,18 @@ class ControlFlowExitAnalyzerTests {
         }
 
         return null;
+    }
+
+    /**
+     * Invokes the private then-branch resolver on the analyzer under test.
+     *
+     * @param ifStatement the {@code if} node to inspect.
+     * @return the resolved then-branch node.
+     * @throws Exception when reflection fails.
+     */
+    private static DetailAST invokeFindIfBranch(DetailAST ifStatement) throws Exception {
+        Method method = ControlFlowExitAnalyzer.class.getDeclaredMethod("findIfBranch", DetailAST.class);
+        method.setAccessible(true);
+        return (DetailAST) method.invoke(null, ifStatement);
     }
 }
