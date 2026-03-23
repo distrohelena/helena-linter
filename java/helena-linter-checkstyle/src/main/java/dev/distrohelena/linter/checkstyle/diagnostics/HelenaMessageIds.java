@@ -76,6 +76,11 @@ public final class HelenaMessageIds {
     public static final String IF_LEADING_SPACING = "if-leading-spacing";
 
     /**
+     * Identifies diagnostics that require multiline layout for non-empty blocks.
+     */
+    public static final String MULTILINE_BLOCK_LAYOUT = "multiline-block-layout";
+
+    /**
      * Prevents direct instantiation.
      */
     private HelenaMessageIds() {
