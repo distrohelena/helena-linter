@@ -11,6 +11,11 @@ public final class HelenaMessageIds {
     public static final String COMPLEMENTARY_CONDITION = "complementary-condition";
 
     /**
+     * Identifies diagnostics that report a redundant complementary {@code else if} branch.
+     */
+    public static final String REDUNDANT_ELSE_IF = "redundant-else-if";
+
+    /**
      * Identifies diagnostics that require a blank line before a target statement.
      */
     public static final String BLANK_LINE_BEFORE_STATEMENT = "blank-line-before-statement";
@@ -34,6 +39,11 @@ public final class HelenaMessageIds {
      * Identifies diagnostics that require a blank line after an {@code if} chain.
      */
     public static final String IF_FOLLOWING_SPACING = "if-following-spacing";
+
+    /**
+     * Identifies diagnostics that require sibling {@code if} statements to be folded into an {@code else if} chain.
+     */
+    public static final String IF_ELSE_IF_CHAIN = "if-else-if-chain";
 
     /**
      * Identifies diagnostics that require a blank line after a non-{@code if} control block.
