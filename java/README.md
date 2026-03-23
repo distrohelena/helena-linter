@@ -59,13 +59,11 @@ The package now exposes a standard Maven publication named `mavenJava` with:
 - artifact id `helena-linter-checkstyle`
 - sources jar
 - javadoc jar
+- MIT license metadata
 - POM metadata pointing to the GitHub repository
 
 If you want to publish to a remote Maven repository later, add the target repository under the
 `publishing.repositories` block in `helena-linter-checkstyle/build.gradle.kts`.
-
-Before remote publication, add the real repository license metadata as well. The repo does not
-currently contain a `LICENSE` file, so the generated POM intentionally avoids claiming one.
 
 ## Full Rule List
 

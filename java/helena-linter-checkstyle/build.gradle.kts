@@ -35,6 +35,13 @@ publishing {
                 description.set("Helena readability and control-flow Checkstyle rules for Java projects.")
                 url.set("https://github.com/distrohelena/helena-linter")
 
+                licenses {
+                    license {
+                        name.set("MIT")
+                        url.set("https://github.com/distrohelena/helena-linter/blob/master/LICENSE")
+                    }
+                }
+
                 developers {
                     developer {
                         id.set("distrohelena")
