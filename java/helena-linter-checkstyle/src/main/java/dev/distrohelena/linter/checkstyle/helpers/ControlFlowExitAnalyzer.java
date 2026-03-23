@@ -49,7 +49,7 @@ public final class ControlFlowExitAnalyzer {
      * @return {@code true} when an executed statement definitely exits the block; otherwise {@code false}.
      */
     private static boolean doesBlockDefinitelyExit(DetailAST block) {
-        for (DetailAST child = block.getFirstChild(); child != null; child = child.getNextSibling()) {
+        for (DetailAST child = block.getFirstChild(); child != null; child = StatementAstNavigator.getNextSibling(child)) {
             if (doesStatementDefinitelyExit(child)) {
                 return true;
             }
@@ -94,7 +94,7 @@ public final class ControlFlowExitAnalyzer {
             return null;
         }
 
-        DetailAST branch = child.getNextSibling();
+        DetailAST branch = StatementAstNavigator.getNextSibling(child);
 
         while (branch != null
                 && branch.getType() != TokenTypes.SLIST
@@ -109,7 +109,7 @@ public final class ControlFlowExitAnalyzer {
                 && branch.getType() != TokenTypes.LITERAL_SWITCH
                 && branch.getType() != TokenTypes.LITERAL_TRY
                 && branch.getType() != TokenTypes.LITERAL_SYNCHRONIZED) {
-            branch = branch.getNextSibling();
+            branch = StatementAstNavigator.getNextSibling(branch);
         }
 
         return branch;

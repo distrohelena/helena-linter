@@ -1,6 +1,7 @@
 package dev.distrohelena.linter.checkstyle.helpers;
 
 import com.puppycrawl.tools.checkstyle.api.DetailAST;
+import com.puppycrawl.tools.checkstyle.api.TokenTypes;
 
 /**
  * Provides small navigation helpers for walking across Checkstyle sibling AST nodes.
@@ -14,31 +15,49 @@ public final class StatementAstNavigator {
     }
 
     /**
-     * Gets the immediate previous sibling for the supplied AST node.
+     * Gets the previous statement sibling for the supplied AST node.
      *
-     * @param node the node whose previous sibling should be resolved.
-     * @return the previous sibling node, or {@code null} when the node has none.
+     * <p>Hidden comment nodes injected by {@code appendHiddenCommentNodes()} are skipped so callers
+     * can reason about actual statement adjacency.</p>
+     *
+     * @param node the node whose previous statement sibling should be resolved.
+     * @return the previous statement sibling node, or {@code null} when the node has none.
      */
     public static DetailAST getPreviousSibling(DetailAST node) {
         if (node == null) {
             return null;
         }
 
-        return node.getPreviousSibling();
+        DetailAST previousSibling = node.getPreviousSibling();
+
+        while (previousSibling != null && isIgnorableSibling(previousSibling)) {
+            previousSibling = previousSibling.getPreviousSibling();
+        }
+
+        return previousSibling;
     }
 
     /**
-     * Gets the immediate next sibling for the supplied AST node.
+     * Gets the next statement sibling for the supplied AST node.
      *
-     * @param node the node whose next sibling should be resolved.
-     * @return the next sibling node, or {@code null} when the node has none.
+     * <p>Hidden comment nodes injected by {@code appendHiddenCommentNodes()} are skipped so callers
+     * can reason about actual statement adjacency.</p>
+     *
+     * @param node the node whose next statement sibling should be resolved.
+     * @return the next statement sibling node, or {@code null} when the node has none.
      */
     public static DetailAST getNextSibling(DetailAST node) {
         if (node == null) {
             return null;
         }
 
-        return node.getNextSibling();
+        DetailAST nextSibling = node.getNextSibling();
+
+        while (nextSibling != null && isIgnorableSibling(nextSibling)) {
+            nextSibling = nextSibling.getNextSibling();
+        }
+
+        return nextSibling;
     }
 
     /**
@@ -58,5 +77,23 @@ public final class StatementAstNavigator {
         }
 
         return first.getParent() == second.getParent();
+    }
+
+    /**
+     * Determines whether the supplied AST node represents a hidden comment node.
+     *
+     * @param node the node to inspect.
+     * @return {@code true} when the node is comment trivia; otherwise {@code false}.
+     */
+    private static boolean isIgnorableSibling(DetailAST node) {
+        int tokenType = node.getType();
+
+        return tokenType == TokenTypes.SINGLE_LINE_COMMENT
+                || tokenType == TokenTypes.BLOCK_COMMENT_BEGIN
+                || tokenType == TokenTypes.BLOCK_COMMENT_END
+                || tokenType == TokenTypes.COMMENT_CONTENT
+                || tokenType == TokenTypes.SEMI
+                || tokenType == TokenTypes.LCURLY
+                || tokenType == TokenTypes.RCURLY;
     }
 }

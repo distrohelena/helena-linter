@@ -41,10 +41,18 @@ public final class ConditionComparisonAnalyzer {
      * @return the comparable expression subtree.
      */
     private static DetailAST normalizeCondition(DetailAST condition) {
-        if (condition == null) {
-            return null;
-        } else if (condition.getType() == TokenTypes.EXPR && condition.getFirstChild() != null) {
-            return condition.getFirstChild();
+        while (condition != null) {
+            if (condition.getType() == TokenTypes.EXPR && condition.getFirstChild() != null) {
+                condition = condition.getFirstChild();
+                continue;
+            }
+
+            if (condition.getType() == TokenTypes.LPAREN && condition.getFirstChild() != null) {
+                condition = condition.getFirstChild();
+                continue;
+            }
+
+            break;
         }
 
         return condition;

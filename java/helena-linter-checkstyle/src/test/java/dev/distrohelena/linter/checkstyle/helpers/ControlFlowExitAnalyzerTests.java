@@ -58,6 +58,31 @@ class ControlFlowExitAnalyzerTests {
     }
 
     /**
+     * Confirms that a nested block with a conditional exit still counts as fallthrough when later
+     * statements remain reachable.
+     *
+     * @throws Exception when the source cannot be parsed for the test fixture.
+     */
+    @Test
+    void shouldRejectNestedBlockThatCanFallThroughAfterConditionalExit() throws Exception {
+        DetailAST methodBody = findFirstToken(parseCompilationUnit("""
+                class Test {
+                    void test(boolean flag) {
+                        {
+                            if (flag) {
+                                return;
+                            }
+                        }
+
+                        work();
+                    }
+                }
+                """), TokenTypes.METHOD_DEF).findFirstToken(TokenTypes.SLIST);
+
+        assertFalse(ControlFlowExitAnalyzer.doesStatementDefinitelyExit(methodBody));
+    }
+
+    /**
      * Supplies the exit-statement fixtures used by the parameterized test.
      *
      * @return the exit-statement scenarios and their token types.
