@@ -110,6 +110,23 @@ func f() {
 		}
 	})
 
+	t.Run("multi-line block comment between statements", func(t *testing.T) {
+		fset, block, file := parseBlock(t, `package p
+
+func f() {
+	first()
+	/*
+		comment line 1
+		comment line 2
+	*/
+	second()
+}`)
+
+		if HasBlankLineBetween(fset, file.Comments, block.List[0], block.List[1]) {
+			t.Fatal("HasBlankLineBetween() = true, want false")
+		}
+	})
+
 	t.Run("blank line before or after intervening comment group", func(t *testing.T) {
 		tests := []struct {
 			name string
@@ -133,6 +150,34 @@ func f() {
 func f() {
 	first()
 	// comment
+
+	second()
+}`,
+			},
+			{
+				name: "blank line before multiline block comment",
+				src: `package p
+
+func f() {
+	first()
+
+	/*
+		comment line 1
+		comment line 2
+	*/
+	second()
+}`,
+			},
+			{
+				name: "blank line after multiline block comment",
+				src: `package p
+
+func f() {
+	first()
+	/*
+		comment line 1
+		comment line 2
+	*/
 
 	second()
 }`,

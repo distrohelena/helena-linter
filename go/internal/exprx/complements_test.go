@@ -30,6 +30,7 @@ func TestComplementary(t *testing.T) {
 		{name: "parenthesized negation", left: "!(flag)", right: "flag", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: true},
 		{name: "negated equality with swapped operands", left: "!(a == b)", right: "b != a", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: true},
 		{name: "generic call with multiple type arguments", left: "!pred[T, U](x)", right: "pred[T, U](x)", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: true},
+		{name: "ellipsis changes call shape", left: "pred(xs...)", right: "pred(xs)", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
 		{name: "different operands", left: "value == nil", right: "other != nil", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
 		{name: "different negation target", left: "!flag", right: "other", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
 		{name: "same polarity", left: "flag", right: "flag", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
