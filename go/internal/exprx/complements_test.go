@@ -3,6 +3,7 @@ package exprx
 import (
 	"go/ast"
 	"go/parser"
+	"go/token"
 	"testing"
 )
 
@@ -12,6 +13,32 @@ func mustExpr(t *testing.T, src string) ast.Expr {
 	expr, err := parser.ParseExpr(src)
 	if err != nil {
 		t.Fatalf("ParseExpr(%q) error = %v", src, err)
+	}
+	return expr
+}
+
+func mustCallExpr(t *testing.T, src string) ast.Expr {
+	t.Helper()
+
+	fset := token.NewFileSet()
+	file, err := parser.ParseFile(fset, "input.go", src, 0)
+	if err != nil {
+		t.Fatalf("ParseFile() error = %v", err)
+	}
+
+	var expr ast.Expr
+	ast.Inspect(file, func(n ast.Node) bool {
+		if expr != nil {
+			return false
+		}
+		if e, ok := n.(*ast.CallExpr); ok {
+			expr = e
+			return false
+		}
+		return true
+	})
+	if expr == nil {
+		t.Fatal("did not find call expression")
 	}
 	return expr
 }
@@ -72,5 +99,22 @@ func TestComplementarySelectorNamesStaySpellingBased(t *testing.T) {
 func TestComplementaryNilComparatorDoesNotPanicOnIdentifierComparison(t *testing.T) {
 	if got := Complementary(mustExpr(t, "!flag"), mustExpr(t, "flag"), nil); got {
 		t.Fatal("Complementary() = true, want false with nil comparator")
+	}
+}
+
+func TestComplementaryVariadicCallsFromDifferentLocations(t *testing.T) {
+	left := mustExpr(t, `!pred(xs...)`)
+	right := mustCallExpr(t, `package p
+
+func f() {
+	pred(xs...)
+}`)
+
+	identEqual := func(left, right *ast.Ident) bool {
+		return left.Name == right.Name
+	}
+
+	if got := Complementary(left, right, identEqual); !got {
+		t.Fatal("Complementary() = false, want true for identical variadic calls from different locations")
 	}
 }

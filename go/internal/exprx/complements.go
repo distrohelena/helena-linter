@@ -120,7 +120,7 @@ func sameExpr(left, right ast.Expr, identEqual IdentEqualFunc) bool {
 		return ok && l.Op == r.Op && sameExpr(l.X, r.X, identEqual) && sameExpr(l.Y, r.Y, identEqual)
 	case *ast.CallExpr:
 		r, ok := right.(*ast.CallExpr)
-		if !ok || !sameExpr(l.Fun, r.Fun, identEqual) || len(l.Args) != len(r.Args) || l.Ellipsis != r.Ellipsis {
+		if !ok || !sameExpr(l.Fun, r.Fun, identEqual) || len(l.Args) != len(r.Args) || (l.Ellipsis != token.NoPos) != (r.Ellipsis != token.NoPos) {
 			return false
 		}
 		for i := range l.Args {
