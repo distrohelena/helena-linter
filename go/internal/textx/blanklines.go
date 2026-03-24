@@ -59,6 +59,47 @@ func HasBlankLineBetween(fset *token.FileSet, comments []*ast.CommentGroup, left
 	return false
 }
 
+// BlankLineInsertionPos returns the token position where a blank line should be
+// inserted before right while preserving any intervening comment groups.
+func BlankLineInsertionPos(fset *token.FileSet, comments []*ast.CommentGroup, left, right ast.Node) token.Pos {
+	if fset == nil || left == nil || right == nil {
+		return token.NoPos
+	}
+
+	leftSpan, ok := nodeLineSpan(fset, left)
+	if !ok {
+		return token.NoPos
+	}
+	rightSpan, ok := nodeLineSpan(fset, right)
+	if !ok {
+		return token.NoPos
+	}
+
+	insertLine := rightSpan.start
+	for _, group := range comments {
+		if group == nil {
+			continue
+		}
+
+		commentSpan, ok := commentGroupLineSpan(fset, group)
+		if !ok {
+			continue
+		}
+		if commentSpan.start <= leftSpan.end || commentSpan.start >= rightSpan.start {
+			continue
+		}
+		if commentSpan.start < insertLine {
+			insertLine = commentSpan.start
+		}
+	}
+
+	file := fset.File(right.Pos())
+	if file == nil {
+		return token.NoPos
+	}
+	return file.LineStart(insertLine)
+}
+
 func nodeLineSpan(fset *token.FileSet, node ast.Node) (lineSpan, bool) {
 	start := fset.Position(node.Pos()).Line
 	end := fset.Position(node.End()).Line
