@@ -2,7 +2,9 @@ package bundle
 
 import "golang.org/x/tools/go/analysis"
 
-// Recommended returns the default Helena analyzer set for Go consumers.
+// Recommended currently returns no analyzers.
+//
+// Task 2 will populate the bundled set once the individual analyzers exist.
 func Recommended() []*analysis.Analyzer {
-	return nil
+	return []*analysis.Analyzer{}
 }

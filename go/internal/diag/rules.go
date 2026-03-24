@@ -13,7 +13,6 @@ const (
 	RuleIfLeadingSpacing             = "if-leading-spacing"
 	RuleMultilineBlockLayout         = "multiline-block-layout"
 	RuleRedundantElseIf              = "redundant-else-if"
-	RuleControlBodyBraces            = "control-body-braces"
 )
 
 // Message formats a rule-scoped diagnostic message with a stable Helena rule name.

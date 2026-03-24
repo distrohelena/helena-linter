@@ -1,14 +1,15 @@
 package testx
 
-import (
-	"testing"
+import "golang.org/x/tools/go/analysis"
 
-	"golang.org/x/tools/go/analysis"
-)
+type fatallyFailable interface {
+	Helper()
+	Fatalf(format string, args ...any)
+}
 
 // RequireSuggestedFix returns the first fix with the requested message and fails the test if it
 // is not present.
-func RequireSuggestedFix(t *testing.T, diagnostics []analysis.Diagnostic, wantMessage string) analysis.SuggestedFix {
+func RequireSuggestedFix(t fatallyFailable, diagnostics []analysis.Diagnostic, wantMessage string) analysis.SuggestedFix {
 	t.Helper()
 
 	for _, diagnostic := range diagnostics {
