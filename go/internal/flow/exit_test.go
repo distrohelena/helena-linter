@@ -65,22 +65,22 @@ func f() {
 		cleanup()
 	}
 }`), want: false},
-		{name: "break exits control flow", stmt: mustStmt(t, `package p
+		{name: "bare break is not context-free exit", stmt: mustStmt(t, `package p
 
 func f() {
 	break
-}`), want: true},
-		{name: "continue exits control flow", stmt: mustStmt(t, `package p
+}`), want: false},
+		{name: "bare continue is not context-free exit", stmt: mustStmt(t, `package p
 
 func f() {
 	continue
-}`), want: true},
-		{name: "goto exits control flow", stmt: mustStmt(t, `package p
+}`), want: false},
+		{name: "bare goto is not context-free exit", stmt: mustStmt(t, `package p
 
 func f() {
 	goto done
 done:
-}`), want: true},
+}`), want: false},
 		{name: "non-exit statement", stmt: mustStmt(t, `package p
 
 func f() {

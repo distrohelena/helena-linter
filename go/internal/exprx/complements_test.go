@@ -28,6 +28,7 @@ func TestComplementary(t *testing.T) {
 		{name: "nil comparison is symmetric", left: "nil != value", right: "value == nil", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: true},
 		{name: "negation vs positive", left: "!flag", right: "flag", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: true},
 		{name: "parenthesized negation", left: "!(flag)", right: "flag", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: true},
+		{name: "negated equality with swapped operands", left: "!(a == b)", right: "b != a", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: true},
 		{name: "different operands", left: "value == nil", right: "other != nil", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
 		{name: "different negation target", left: "!flag", right: "other", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
 		{name: "same polarity", left: "flag", right: "flag", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},

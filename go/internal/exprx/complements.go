@@ -26,6 +26,10 @@ func Complementary(left, right ast.Expr, identEqual IdentEqualFunc) bool {
 		return true
 	}
 
+	if isNegatedEqualityComplement(left, right, identEqual) || isNegatedEqualityComplement(right, left, identEqual) {
+		return true
+	}
+
 	lbin, lok := left.(*ast.BinaryExpr)
 	rbin, rok := right.(*ast.BinaryExpr)
 	if !lok || !rok {
@@ -39,8 +43,14 @@ func Complementary(left, right ast.Expr, identEqual IdentEqualFunc) bool {
 		return false
 	}
 
-	return sameExpr(lbin.X, rbin.X, identEqual) && sameExpr(lbin.Y, rbin.Y, identEqual) ||
-		sameExpr(lbin.X, rbin.Y, identEqual) && sameExpr(lbin.Y, rbin.X, identEqual)
+	if sameExpr(lbin.X, rbin.X, identEqual) && sameExpr(lbin.Y, rbin.Y, identEqual) {
+		return true
+	}
+	if sameExpr(lbin.X, rbin.Y, identEqual) && sameExpr(lbin.Y, rbin.X, identEqual) {
+		return true
+	}
+
+	return false
 }
 
 func stripParens(expr ast.Expr) ast.Expr {
@@ -59,6 +69,24 @@ func isNegationOf(a, b ast.Expr, identEqual IdentEqualFunc) bool {
 		return false
 	}
 	return sameExpr(unary.X, b, identEqual)
+}
+
+func isNegatedEqualityComplement(left, right ast.Expr, identEqual IdentEqualFunc) bool {
+	unary, ok := left.(*ast.UnaryExpr)
+	if !ok || unary.Op != token.NOT {
+		return false
+	}
+	lbin, ok := stripParens(unary.X).(*ast.BinaryExpr)
+	if !ok || !isEqualityOrInequality(lbin.Op) {
+		return false
+	}
+	rbin, ok := stripParens(right).(*ast.BinaryExpr)
+	if !ok || !isEqualityOrInequality(rbin.Op) || lbin.Op == rbin.Op {
+		return false
+	}
+
+	return sameExpr(lbin.X, rbin.X, identEqual) && sameExpr(lbin.Y, rbin.Y, identEqual) ||
+		sameExpr(lbin.X, rbin.Y, identEqual) && sameExpr(lbin.Y, rbin.X, identEqual)
 }
 
 func isEqualityOrInequality(op token.Token) bool {
