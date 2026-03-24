@@ -7,19 +7,31 @@ type fatallyFailable interface {
 	Fatalf(format string, args ...any)
 }
 
-// RequireSuggestedFix returns the first fix with the requested message and fails the test if it
-// is not present.
+// RequireSuggestedFix returns the unique fix with the requested message and fails the test if the
+// fix is missing or duplicated.
 func RequireSuggestedFix(t fatallyFailable, diagnostics []analysis.Diagnostic, wantMessage string) analysis.SuggestedFix {
 	t.Helper()
+
+	var (
+		matched     bool
+		matchingFix analysis.SuggestedFix
+	)
 
 	for _, diagnostic := range diagnostics {
 		for _, fix := range diagnostic.SuggestedFixes {
 			if fix.Message == wantMessage {
-				return fix
+				if matched {
+					t.Fatalf("found multiple suggested fixes with message %q", wantMessage)
+				}
+				matched = true
+				matchingFix = fix
 			}
 		}
 	}
 
-	t.Fatalf("did not find suggested fix with message %q", wantMessage)
-	return analysis.SuggestedFix{}
+	if !matched {
+		t.Fatalf("did not find suggested fix with message %q", wantMessage)
+	}
+
+	return matchingFix
 }

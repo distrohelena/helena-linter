@@ -1,6 +1,7 @@
 package testx
 
 import (
+	"fmt"
 	"go/token"
 	"testing"
 
@@ -14,7 +15,28 @@ type fakeTB struct {
 func (f *fakeTB) Helper() {}
 
 func (f *fakeTB) Fatalf(format string, args ...any) {
-	f.fatalMsg = format
+	f.fatalMsg = fmt.Sprintf(format, args...)
+	panic(f.fatalMsg)
+}
+
+func expectFatal(t *testing.T, want string, fn func()) {
+	t.Helper()
+
+	defer func() {
+		r := recover()
+		if r == nil {
+			t.Fatalf("expected panic with %q", want)
+		}
+		got, ok := r.(string)
+		if !ok {
+			t.Fatalf("panic value = %#v, want string %q", r, want)
+		}
+		if got != want {
+			t.Fatalf("panic value = %q, want %q", got, want)
+		}
+	}()
+
+	fn()
 }
 
 func TestRequireSuggestedFix(t *testing.T) {
@@ -36,14 +58,29 @@ func TestRequireSuggestedFix(t *testing.T) {
 
 	t.Run("reports missing fix", func(t *testing.T) {
 		fake := &fakeTB{}
-		got := RequireSuggestedFix(fake, []analysis.Diagnostic{{}}, "missing fix")
-		if got.Message != "" || len(got.TextEdits) != 0 {
-			t.Fatalf("RequireSuggestedFix() = %#v, want zero value", got)
-		}
-		want := "did not find suggested fix with message %q"
-		if fake.fatalMsg != want {
-			t.Fatalf("Fatalf format = %q, want %q", fake.fatalMsg, want)
-		}
+		want := `did not find suggested fix with message "missing fix"`
+		expectFatal(t, want, func() {
+			RequireSuggestedFix(fake, []analysis.Diagnostic{{}}, "missing fix")
+		})
+	})
+
+	t.Run("fails on duplicate matches", func(t *testing.T) {
+		fake := &fakeTB{}
+		want := `found multiple suggested fixes with message "duplicate"`
+		expectFatal(t, want, func() {
+			RequireSuggestedFix(fake, []analysis.Diagnostic{
+				{
+					SuggestedFixes: []analysis.SuggestedFix{
+						{Message: "duplicate"},
+					},
+				},
+				{
+					SuggestedFixes: []analysis.SuggestedFix{
+						{Message: "duplicate"},
+					},
+				},
+			}, "duplicate")
+		})
 	})
 
 	t.Run("returns edits intact", func(t *testing.T) {
