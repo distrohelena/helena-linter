@@ -34,11 +34,20 @@ func (r RuleID) Validate() error {
 	if strings.TrimSpace(raw) != raw {
 		return fmt.Errorf("rule id %q cannot contain leading or trailing whitespace", raw)
 	}
+	if raw != strings.ToLower(raw) {
+		return fmt.Errorf("rule id %q must use lowercase ASCII", raw)
+	}
+	if strings.ContainsAny(raw, "_ ") {
+		return fmt.Errorf("rule id %q must use kebab-case", raw)
+	}
+	if strings.Contains(raw, "--") {
+		return fmt.Errorf("rule id %q must use single hyphen separators", raw)
+	}
 	for _, ch := range raw {
-		if unicode.IsUpper(ch) {
-			return fmt.Errorf("rule id %q must be lowercase", raw)
+		if ch > unicode.MaxASCII {
+			return fmt.Errorf("rule id %q must contain ASCII characters only", raw)
 		}
-		if !(unicode.IsLower(ch) || unicode.IsDigit(ch) || ch == '-') {
+		if !(ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9' || ch == '-') {
 			return fmt.Errorf("rule id %q contains invalid character %q", raw, ch)
 		}
 	}

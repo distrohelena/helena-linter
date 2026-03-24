@@ -14,8 +14,9 @@ flow bodies.
 
 - `bundle/` exposes the default Helena analyzer hook; at scaffold time `Recommended()` returns an
   empty analyzer list until later tasks add analyzers
-- `analyzers/` will hold one analyzer per Helena rule
-- `internal/` contains shared helpers for diagnostics, spacing, flow analysis, and tests
+- `analyzers/` is reserved for one analyzer per Helena rule
+- `internal/diag/` contains diagnostic-rule helpers
+- `internal/testx/` contains test helpers for analyzer suggested fixes
 - `testdata/` will hold `analysistest` fixtures and fix-output samples
 
 ## Supported Rules
