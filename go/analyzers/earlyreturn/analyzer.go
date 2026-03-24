@@ -3,12 +3,14 @@ package earlyreturn
 
 import (
 	"go/ast"
+	"go/parser"
 	"go/token"
 	"os"
 	"strings"
 
 	"github.com/distrohelena/helena-linter/go/internal/astx"
 	"github.com/distrohelena/helena-linter/go/internal/diag"
+	"github.com/distrohelena/helena-linter/go/internal/exprx"
 	"github.com/distrohelena/helena-linter/go/internal/fixx"
 	"github.com/distrohelena/helena-linter/go/internal/flow"
 	"golang.org/x/tools/go/analysis"
@@ -157,7 +159,9 @@ func ifElseGuardEdit(
 		return analysis.TextEdit{}, false
 	}
 
-	if hasScopeChangingStatement(stmt.Body.List) || flow.DefinitelyExitsControlFlow(stmt.Body) || !flow.DefinitelyExitsControlFlow(elseBlock) {
+	thenExits := flow.DefinitelyExitsControlFlow(stmt.Body)
+	elseExits := flow.DefinitelyExitsControlFlow(elseBlock)
+	if !thenExits && !elseExits {
 		return analysis.TextEdit{}, false
 	}
 
@@ -170,7 +174,7 @@ func ifElseGuardEdit(
 	outerIndent := lineIndent(source, file.Offset(stmt.Pos()))
 	indentUnit := detectIndentUnit(source, file, stmt.Body, outerIndent)
 
-	guardCond, ok := invertedConditionText(source, file, stmt.Cond)
+	thenText, ok := blockContent(source, file, stmt.Body)
 	if !ok {
 		return analysis.TextEdit{}, false
 	}
@@ -180,9 +184,40 @@ func ifElseGuardEdit(
 		return analysis.TextEdit{}, false
 	}
 
-	thenText, ok := blockContent(source, file, stmt.Body)
-	if !ok {
-		return analysis.TextEdit{}, false
+	var (
+		guardCond   string
+		guardBody   string
+		successBody string
+	)
+
+	switch {
+	case !thenExits && elseExits:
+		if hasScopeChangingStatement(stmt.Body.List) {
+			return analysis.TextEdit{}, false
+		}
+		guardCond, ok = invertedConditionText(source, file, stmt.Cond)
+		if !ok {
+			return analysis.TextEdit{}, false
+		}
+		guardBody = elseText
+		successBody = thenText
+	case thenExits && !elseExits:
+		if hasScopeChangingStatement(elseBlock.List) {
+			return analysis.TextEdit{}, false
+		}
+		guardCond, ok = exprText(source, file, stmt.Cond)
+		if !ok {
+			return analysis.TextEdit{}, false
+		}
+		guardBody = thenText
+		successBody = elseText
+	default:
+		guardCond, ok = invertedConditionText(source, file, stmt.Cond)
+		if !ok {
+			return analysis.TextEdit{}, false
+		}
+		guardBody = elseText
+		successBody = thenText
 	}
 
 	replacement := renderGuardClause(
@@ -190,8 +225,8 @@ func ifElseGuardEdit(
 		outerIndent,
 		indentUnit,
 		guardCond,
-		elseText,
-		thenText,
+		guardBody,
+		successBody,
 	)
 
 	return fixx.Replace(stmt.Pos(), stmt.End(), replacement), true
@@ -244,13 +279,16 @@ func invertedConditionText(source []byte, file *token.File, expr ast.Expr) (stri
 		return "", false
 	}
 
+	inverted := ""
 	switch e := stripParens(expr).(type) {
 	case *ast.UnaryExpr:
 		if e.Op != token.NOT {
 			break
 		}
-		text, ok := exprText(source, file, e.X)
-		return text, ok
+		inverted, ok = exprText(source, file, e.X)
+		if !ok {
+			return "", false
+		}
 	case *ast.BinaryExpr:
 		left, ok := exprText(source, file, e.X)
 		if !ok {
@@ -262,15 +300,28 @@ func invertedConditionText(source []byte, file *token.File, expr ast.Expr) (stri
 		}
 		switch e.Op {
 		case token.EQL:
-			return left + " != " + right, true
+			inverted = left + " != " + right
 		case token.NEQ:
-			return left + " == " + right, true
+			inverted = left + " == " + right
 		}
 	case *ast.Ident, *ast.SelectorExpr, *ast.IndexExpr, *ast.IndexListExpr, *ast.CallExpr:
-		return "!" + raw, true
+		inverted = "!" + raw
 	}
 
-	return "!(" + raw + ")", true
+	if inverted == "" {
+		inverted = "!(" + raw + ")"
+	}
+
+	parsed, err := parser.ParseExpr(inverted)
+	if err != nil {
+		return "", false
+	}
+	if !exprx.Complementary(expr, parsed, func(left, right *ast.Ident) bool {
+		return left.Name == right.Name
+	}) {
+		return "", false
+	}
+	return inverted, true
 }
 
 func stripParens(expr ast.Expr) ast.Expr {
