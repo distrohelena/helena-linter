@@ -5,9 +5,9 @@ import (
 	"go/token"
 )
 
-// ExactLocalExit reports whether stmt is one of the local exit statements that
-// Helena rules care about.
-func ExactLocalExit(stmt ast.Stmt) bool {
+// IsHelenaExitStatement reports whether stmt is a Helena exit-style statement.
+// The current Helena rules treat return, break, continue, and goto as exits.
+func IsHelenaExitStatement(stmt ast.Stmt) bool {
 	switch s := stmt.(type) {
 	case *ast.ReturnStmt:
 		return true

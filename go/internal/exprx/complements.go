@@ -5,9 +5,22 @@ import (
 	"go/token"
 )
 
+// IdentEqualFunc reports whether two identifiers should be treated as the same
+// symbol for the purposes of complement detection.
+type IdentEqualFunc func(left, right *ast.Ident) bool
+
 // Complementary reports whether left and right are exact logical complements
 // for the small set of shapes the Helena Go analyzers rely on.
-func Complementary(left, right ast.Expr) bool {
+//
+// Callers should provide an identifier comparison function that matches their
+// scope model. When nil, the helper falls back to exact identifier spelling.
+func Complementary(left, right ast.Expr, identEqual IdentEqualFunc) bool {
+	if identEqual == nil {
+		identEqual = func(left, right *ast.Ident) bool {
+			return left.Name == right.Name
+		}
+	}
+
 	left = stripParens(left)
 	right = stripParens(right)
 
@@ -15,7 +28,7 @@ func Complementary(left, right ast.Expr) bool {
 		return false
 	}
 
-	if isNegationOf(left, right) || isNegationOf(right, left) {
+	if isNegationOf(left, right, identEqual) || isNegationOf(right, left, identEqual) {
 		return true
 	}
 
@@ -32,8 +45,8 @@ func Complementary(left, right ast.Expr) bool {
 		return false
 	}
 
-	return sameExpr(lbin.X, rbin.X) && sameExpr(lbin.Y, rbin.Y) ||
-		sameExpr(lbin.X, rbin.Y) && sameExpr(lbin.Y, rbin.X)
+	return sameExpr(lbin.X, rbin.X, identEqual) && sameExpr(lbin.Y, rbin.Y, identEqual) ||
+		sameExpr(lbin.X, rbin.Y, identEqual) && sameExpr(lbin.Y, rbin.X, identEqual)
 }
 
 func stripParens(expr ast.Expr) ast.Expr {
@@ -46,19 +59,19 @@ func stripParens(expr ast.Expr) ast.Expr {
 	}
 }
 
-func isNegationOf(a, b ast.Expr) bool {
+func isNegationOf(a, b ast.Expr, identEqual IdentEqualFunc) bool {
 	unary, ok := a.(*ast.UnaryExpr)
 	if !ok || unary.Op != token.NOT {
 		return false
 	}
-	return sameExpr(unary.X, b)
+	return sameExpr(unary.X, b, identEqual)
 }
 
 func isEqualityOrInequality(op token.Token) bool {
 	return op == token.EQL || op == token.NEQ
 }
 
-func sameExpr(left, right ast.Expr) bool {
+func sameExpr(left, right ast.Expr, identEqual IdentEqualFunc) bool {
 	left = stripParens(left)
 	right = stripParens(right)
 
@@ -67,35 +80,35 @@ func sameExpr(left, right ast.Expr) bool {
 		return right == nil
 	case *ast.Ident:
 		r, ok := right.(*ast.Ident)
-		return ok && l.Name == r.Name
+		return ok && identEqual(l, r)
 	case *ast.BasicLit:
 		r, ok := right.(*ast.BasicLit)
 		return ok && l.Kind == r.Kind && l.Value == r.Value
 	case *ast.SelectorExpr:
 		r, ok := right.(*ast.SelectorExpr)
-		return ok && sameExpr(l.X, r.X) && sameExpr(l.Sel, r.Sel)
+		return ok && sameExpr(l.X, r.X, identEqual) && sameExpr(l.Sel, r.Sel, identEqual)
 	case *ast.UnaryExpr:
 		r, ok := right.(*ast.UnaryExpr)
-		return ok && l.Op == r.Op && sameExpr(l.X, r.X)
+		return ok && l.Op == r.Op && sameExpr(l.X, r.X, identEqual)
 	case *ast.BinaryExpr:
 		r, ok := right.(*ast.BinaryExpr)
-		return ok && l.Op == r.Op && sameExpr(l.X, r.X) && sameExpr(l.Y, r.Y)
+		return ok && l.Op == r.Op && sameExpr(l.X, r.X, identEqual) && sameExpr(l.Y, r.Y, identEqual)
 	case *ast.CallExpr:
 		r, ok := right.(*ast.CallExpr)
-		if !ok || !sameExpr(l.Fun, r.Fun) || len(l.Args) != len(r.Args) {
+		if !ok || !sameExpr(l.Fun, r.Fun, identEqual) || len(l.Args) != len(r.Args) {
 			return false
 		}
 		for i := range l.Args {
-			if !sameExpr(l.Args[i], r.Args[i]) {
+			if !sameExpr(l.Args[i], r.Args[i], identEqual) {
 				return false
 			}
 		}
 		return true
 	case *ast.IndexExpr:
 		r, ok := right.(*ast.IndexExpr)
-		return ok && sameExpr(l.X, r.X) && sameExpr(l.Index, r.Index)
+		return ok && sameExpr(l.X, r.X, identEqual) && sameExpr(l.Index, r.Index, identEqual)
 	case *ast.ParenExpr:
-		return sameExpr(l.X, right)
+		return sameExpr(l.X, right, identEqual)
 	default:
 		return false
 	}

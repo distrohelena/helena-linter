@@ -23,34 +23,34 @@ func mustStmt(t *testing.T, src string) ast.Stmt {
 	return fn.Body.List[0]
 }
 
-func TestExactLocalExit(t *testing.T) {
+func TestIsHelenaExitStatement(t *testing.T) {
 	tests := []struct {
 		name string
 		stmt ast.Stmt
 		want bool
 	}{
-		{name: "return", stmt: mustStmt(t, `package p
+		{name: "return exits", stmt: mustStmt(t, `package p
 
 func f() {
 	return
 }`), want: true},
-		{name: "break", stmt: mustStmt(t, `package p
+		{name: "break exits", stmt: mustStmt(t, `package p
 
 func f() {
 	break
 }`), want: true},
-		{name: "continue", stmt: mustStmt(t, `package p
+		{name: "continue exits", stmt: mustStmt(t, `package p
 
 func f() {
 	continue
 }`), want: true},
-		{name: "goto", stmt: mustStmt(t, `package p
+		{name: "goto exits", stmt: mustStmt(t, `package p
 
 func f() {
 	goto done
 done:
 }`), want: true},
-		{name: "non-exit", stmt: mustStmt(t, `package p
+		{name: "non-exit statement", stmt: mustStmt(t, `package p
 
 func f() {
 	defer cleanup()
@@ -59,8 +59,8 @@ func f() {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ExactLocalExit(tt.stmt); got != tt.want {
-				t.Fatalf("ExactLocalExit() = %v, want %v", got, tt.want)
+			if got := IsHelenaExitStatement(tt.stmt); got != tt.want {
+				t.Fatalf("IsHelenaExitStatement() = %v, want %v", got, tt.want)
 			}
 		})
 	}

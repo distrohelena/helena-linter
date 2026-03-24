@@ -34,9 +34,22 @@ func TestComplementary(t *testing.T) {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := Complementary(mustExpr(t, tt.left), mustExpr(t, tt.right)); got != tt.want {
+			if got := Complementary(mustExpr(t, tt.left), mustExpr(t, tt.right), nil); got != tt.want {
 				t.Fatalf("Complementary(%q, %q) = %v, want %v", tt.left, tt.right, got, tt.want)
 			}
 		})
+	}
+}
+
+func TestComplementaryUsesInjectedIdentifierIdentity(t *testing.T) {
+	identEqual := func(left, right *ast.Ident) bool {
+		if left.Name == right.Name {
+			return true
+		}
+		return (left.Name == "foo" && right.Name == "bar") || (left.Name == "bar" && right.Name == "foo")
+	}
+
+	if got := Complementary(mustExpr(t, "foo == nil"), mustExpr(t, "bar != nil"), identEqual); !got {
+		t.Fatal("Complementary() = false, want true when identifiers are treated as equivalent by callback")
 	}
 }
