@@ -23,7 +23,7 @@ func mustStmt(t *testing.T, src string) ast.Stmt {
 	return fn.Body.List[0]
 }
 
-func TestIsHelenaExitStatement(t *testing.T) {
+func TestDefinitelyExitsControlFlow(t *testing.T) {
 	tests := []struct {
 		name string
 		stmt ast.Stmt
@@ -34,17 +34,48 @@ func TestIsHelenaExitStatement(t *testing.T) {
 func f() {
 	return
 }`), want: true},
-		{name: "break exits", stmt: mustStmt(t, `package p
+		{name: "block ending in return exits", stmt: mustStmt(t, `package p
+
+func f() {
+	{
+		return
+	}
+}`), want: true},
+		{name: "if with both branches exiting exits", stmt: mustStmt(t, `package p
+
+func f() {
+	if cond {
+		return
+	} else {
+		return
+	}
+}`), want: true},
+		{name: "labeled return exits", stmt: mustStmt(t, `package p
+
+func f() {
+	done:
+		return
+}`), want: true},
+		{name: "if with one non-exiting branch does not exit", stmt: mustStmt(t, `package p
+
+func f() {
+	if cond {
+		return
+	} else {
+		cleanup()
+	}
+}`), want: false},
+		{name: "break exits control flow", stmt: mustStmt(t, `package p
 
 func f() {
 	break
 }`), want: true},
-		{name: "continue exits", stmt: mustStmt(t, `package p
+		{name: "continue exits control flow", stmt: mustStmt(t, `package p
 
 func f() {
 	continue
 }`), want: true},
-		{name: "goto exits", stmt: mustStmt(t, `package p
+		{name: "goto exits control flow", stmt: mustStmt(t, `package p
 
 func f() {
 	goto done
@@ -59,8 +90,58 @@ func f() {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IsHelenaExitStatement(tt.stmt); got != tt.want {
-				t.Fatalf("IsHelenaExitStatement() = %v, want %v", got, tt.want)
+			if got := DefinitelyExitsControlFlow(tt.stmt); got != tt.want {
+				t.Fatalf("DefinitelyExitsControlFlow() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIsHelenaExitSpacingStatement(t *testing.T) {
+	tests := []struct {
+		name string
+		stmt ast.Stmt
+		want bool
+	}{
+		{name: "return is spacing exit", stmt: mustStmt(t, `package p
+
+func f() {
+	return
+}`), want: true},
+		{name: "break is spacing exit", stmt: mustStmt(t, `package p
+
+func f() {
+	break
+}`), want: true},
+		{name: "continue is spacing exit", stmt: mustStmt(t, `package p
+
+func f() {
+	continue
+}`), want: true},
+		{name: "goto is spacing exit", stmt: mustStmt(t, `package p
+
+func f() {
+	goto done
+done:
+}`), want: true},
+		{name: "nested if is not a spacing exit", stmt: mustStmt(t, `package p
+
+func f() {
+	if cond {
+		return
+	}
+}`), want: false},
+		{name: "plain statement is not a spacing exit", stmt: mustStmt(t, `package p
+
+func f() {
+	defer cleanup()
+}`), want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := IsHelenaExitSpacingStatement(tt.stmt); got != tt.want {
+				t.Fatalf("IsHelenaExitSpacingStatement() = %v, want %v", got, tt.want)
 			}
 		})
 	}

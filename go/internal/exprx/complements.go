@@ -13,14 +13,8 @@ type IdentEqualFunc func(left, right *ast.Ident) bool
 // for the small set of shapes the Helena Go analyzers rely on.
 //
 // Callers should provide an identifier comparison function that matches their
-// scope model. When nil, the helper falls back to exact identifier spelling.
+// scope model. When nil, identifier comparisons are treated as unequal.
 func Complementary(left, right ast.Expr, identEqual IdentEqualFunc) bool {
-	if identEqual == nil {
-		identEqual = func(left, right *ast.Ident) bool {
-			return left.Name == right.Name
-		}
-	}
-
 	left = stripParens(left)
 	right = stripParens(right)
 
@@ -86,7 +80,7 @@ func sameExpr(left, right ast.Expr, identEqual IdentEqualFunc) bool {
 		return ok && l.Kind == r.Kind && l.Value == r.Value
 	case *ast.SelectorExpr:
 		r, ok := right.(*ast.SelectorExpr)
-		return ok && sameExpr(l.X, r.X, identEqual) && sameExpr(l.Sel, r.Sel, identEqual)
+		return ok && sameExpr(l.X, r.X, identEqual) && sameSelectorIdent(l.Sel, r.Sel)
 	case *ast.UnaryExpr:
 		r, ok := right.(*ast.UnaryExpr)
 		return ok && l.Op == r.Op && sameExpr(l.X, r.X, identEqual)
@@ -112,4 +106,13 @@ func sameExpr(left, right ast.Expr, identEqual IdentEqualFunc) bool {
 	default:
 		return false
 	}
+}
+
+func sameSelectorIdent(left, right ast.Expr) bool {
+	l, ok := left.(*ast.Ident)
+	if !ok {
+		return false
+	}
+	r, ok := right.(*ast.Ident)
+	return ok && l.Name == r.Name
 }
