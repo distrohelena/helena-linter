@@ -8,6 +8,8 @@ It currently contains:
 - [C# package](./csharp/README.md): `DistroHelena.Linter.CSharp`
 - [Java package](./java/README.md): Helena Checkstyle rules packaged in
   `helena-linter-checkstyle`
+- [Go package](./go/README.md): Helena Go analyzers in
+  `github.com/distrohelena/helena-linter/go`
 
 ## Packages
 
@@ -67,8 +69,20 @@ dependencies {
 See [java/README.md](./java/README.md) for the full rule list, consumer instructions, and local
 verification commands.
 
+### Go
+
+The Go package is published as the `github.com/distrohelena/helena-linter/go` module and provides
+Helena analyzers for Go projects through `golang.org/x/tools/go/analysis`.
+
+Use it from a Go analyzer runner or multichecker by importing the module directly and wiring the
+returned analyzers into your own tool.
+
+See [go/README.md](./go/README.md) for the package scope, supported-rule list, and local
+verification command.
+
 ## Repository Layout
 
 - [`typescript/`](./typescript/) contains the npm package and ESLint rule implementation.
 - [`csharp/`](./csharp/) contains the Roslyn analyzer package, tests, and sample consumer.
+- [`go/`](./go/) contains the Go analyzer package and shared helper scaffolding.
 - [`docs/`](./docs/) contains design and planning notes for repository evolution.
