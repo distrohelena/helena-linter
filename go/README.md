@@ -12,8 +12,8 @@ flow bodies.
 
 ## Package Shape
 
-- `bundle/` will expose the default Helena analyzer set; at scaffold time it only exports a
-  placeholder `Recommended()` hook
+- `bundle/` exposes the default Helena analyzer hook; at scaffold time `Recommended()` returns an
+  empty analyzer list until later tasks add analyzers
 - `analyzers/` will hold one analyzer per Helena rule
 - `internal/` contains shared helpers for diagnostics, spacing, flow analysis, and tests
 - `testdata/` will hold `analysistest` fixtures and fix-output samples
@@ -35,8 +35,9 @@ The bundled analyzer set is expected to grow to cover:
 
 ## Verification
 
-Run the Go package tests locally with:
+Run the Go package tests from the `go/` submodule directory:
 
 ```bash
+cd go
 go test ./...
 ```

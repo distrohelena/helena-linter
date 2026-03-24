@@ -2,9 +2,10 @@ package bundle
 
 import "golang.org/x/tools/go/analysis"
 
-// Recommended currently returns no analyzers.
+// Recommended is the bundle hook for the Helena Go analyzers.
 //
-// Task 2 will populate the bundled set once the individual analyzers exist.
+// The scaffold intentionally returns no analyzers yet. Task 2 will populate the
+// bundle once the individual analyzers exist.
 func Recommended() []*analysis.Analyzer {
 	return []*analysis.Analyzer{}
 }

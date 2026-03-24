@@ -75,7 +75,8 @@ The Go package is published as the `github.com/distrohelena/helena-linter/go` mo
 Helena analyzers for Go projects through `golang.org/x/tools/go/analysis`.
 
 Use it from a Go analyzer runner or multichecker by importing the module directly and wiring the
-returned analyzers into your own tool.
+returned analyzers into your own tool. The bundle hook currently exists as a scaffold placeholder
+and returns no analyzers until later tasks add the actual rule implementations.
 
 See [go/README.md](./go/README.md) for the package scope, supported-rule list, and local
 verification command.

@@ -56,6 +56,29 @@ func TestRequireSuggestedFix(t *testing.T) {
 		}
 	})
 
+	t.Run("returns all matching fixes", func(t *testing.T) {
+		fixes := SuggestedFixesByMessage([]analysis.Diagnostic{
+			{
+				SuggestedFixes: []analysis.SuggestedFix{
+					{Message: "duplicate"},
+				},
+			},
+			{
+				SuggestedFixes: []analysis.SuggestedFix{
+					{Message: "other"},
+					{Message: "duplicate"},
+				},
+			},
+		}, "duplicate")
+
+		if len(fixes) != 2 {
+			t.Fatalf("SuggestedFixesByMessage() returned %d fixes, want 2", len(fixes))
+		}
+		if fixes[0].Message != "duplicate" || fixes[1].Message != "duplicate" {
+			t.Fatalf("SuggestedFixesByMessage() = %#v, want two duplicate fixes", fixes)
+		}
+	})
+
 	t.Run("reports missing fix", func(t *testing.T) {
 		fake := &fakeTB{}
 		want := `did not find suggested fix with message "missing fix"`
