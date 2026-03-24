@@ -24,12 +24,12 @@ func DefinitelyExitsControlFlow(stmt ast.Stmt) bool {
 	return false
 }
 
-// IsHelenaExitStatement reports whether stmt is one of the Helena exit-style
-// statements that spacing rules care about.
-func IsHelenaExitStatement(stmt ast.Stmt) bool {
+// IsLocalExitStatement reports whether stmt is a local exit statement such as
+// return, break, continue, or goto.
+func IsLocalExitStatement(stmt ast.Stmt) bool {
 	switch s := stmt.(type) {
 	case *ast.LabeledStmt:
-		return IsHelenaExitStatement(s.Stmt)
+		return IsLocalExitStatement(s.Stmt)
 	case *ast.ReturnStmt:
 		return true
 	case *ast.BranchStmt:

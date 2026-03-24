@@ -81,7 +81,7 @@ func f() {
 	}
 }
 
-func TestIsHelenaExitStatement(t *testing.T) {
+func TestIsLocalExitStatement(t *testing.T) {
 	tests := []struct {
 		name string
 		stmt ast.Stmt
@@ -124,8 +124,8 @@ func f() {
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := IsHelenaExitStatement(tt.stmt); got != tt.want {
-				t.Fatalf("IsHelenaExitStatement() = %v, want %v", got, tt.want)
+			if got := IsLocalExitStatement(tt.stmt); got != tt.want {
+				t.Fatalf("IsLocalExitStatement() = %v, want %v", got, tt.want)
 			}
 		})
 	}
