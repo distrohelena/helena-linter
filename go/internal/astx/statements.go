@@ -1,9 +1,6 @@
 package astx
 
-import (
-	"go/ast"
-	"go/token"
-)
+import "go/ast"
 
 // StatementInBlock carries a statement together with its enclosing block and
 // index within that block.
@@ -54,21 +51,4 @@ func WalkBlockStatements(block *ast.BlockStmt, fn func(StatementInBlock) bool) {
 			return
 		}
 	}
-}
-
-// IsHelenaExitSpacingStatement reports whether stmt is one of the statement
-// forms that Helena spacing rules treat as an exit-style boundary.
-func IsHelenaExitSpacingStatement(stmt ast.Stmt) bool {
-	switch s := stmt.(type) {
-	case *ast.LabeledStmt:
-		return IsHelenaExitSpacingStatement(s.Stmt)
-	case *ast.ReturnStmt:
-		return true
-	case *ast.BranchStmt:
-		switch s.Tok {
-		case token.BREAK, token.CONTINUE, token.GOTO:
-			return true
-		}
-	}
-	return false
 }

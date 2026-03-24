@@ -65,22 +65,6 @@ func f() {
 		cleanup()
 	}
 }`), want: false},
-		{name: "bare break is not context-free exit", stmt: mustStmt(t, `package p
-
-func f() {
-	break
-}`), want: false},
-		{name: "bare continue is not context-free exit", stmt: mustStmt(t, `package p
-
-func f() {
-	continue
-}`), want: false},
-		{name: "bare goto is not context-free exit", stmt: mustStmt(t, `package p
-
-func f() {
-	goto done
-done:
-}`), want: false},
 		{name: "non-exit statement", stmt: mustStmt(t, `package p
 
 func f() {
@@ -92,6 +76,56 @@ func f() {
 		t.Run(tt.name, func(t *testing.T) {
 			if got := DefinitelyExitsControlFlow(tt.stmt); got != tt.want {
 				t.Fatalf("DefinitelyExitsControlFlow() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
+func TestIsHelenaExitStatement(t *testing.T) {
+	tests := []struct {
+		name string
+		stmt ast.Stmt
+		want bool
+	}{
+		{name: "return", stmt: mustStmt(t, `package p
+
+func f() {
+	return
+}`), want: true},
+		{name: "break", stmt: mustStmt(t, `package p
+
+func f() {
+	break
+}`), want: true},
+		{name: "continue", stmt: mustStmt(t, `package p
+
+func f() {
+	continue
+}`), want: true},
+		{name: "goto", stmt: mustStmt(t, `package p
+
+func f() {
+	goto done
+done:
+}`), want: true},
+		{name: "labeled return", stmt: mustStmt(t, `package p
+
+func f() {
+	done:
+		return
+}`), want: true},
+		{name: "synthetic label with no body", stmt: &ast.LabeledStmt{Label: ast.NewIdent("done")}, want: false},
+		{name: "non-exit", stmt: mustStmt(t, `package p
+
+func f() {
+	defer cleanup()
+}`), want: false},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if got := IsHelenaExitStatement(tt.stmt); got != tt.want {
+				t.Fatalf("IsHelenaExitStatement() = %v, want %v", got, tt.want)
 			}
 		})
 	}

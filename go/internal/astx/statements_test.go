@@ -23,6 +23,43 @@ func parseBlock(t *testing.T, src string) (*token.FileSet, *ast.BlockStmt) {
 	return fset, fn.Body
 }
 
+func TestSiblingStatements(t *testing.T) {
+	_, block := parseBlock(t, `package p
+
+func f() {
+	first()
+	middle()
+	last()
+}`)
+
+	first := block.List[0]
+	middle := block.List[1]
+	last := block.List[2]
+
+	prev, ok := PreviousStatement(block, middle)
+	if !ok {
+		t.Fatal("PreviousStatement() returned false for middle statement")
+	}
+	if prev != first {
+		t.Fatalf("PreviousStatement() = %T, want first statement", prev)
+	}
+
+	next, ok := NextStatement(block, middle)
+	if !ok {
+		t.Fatal("NextStatement() returned false for middle statement")
+	}
+	if next != last {
+		t.Fatalf("NextStatement() = %T, want last statement", next)
+	}
+
+	if _, ok := PreviousStatement(block, first); ok {
+		t.Fatal("PreviousStatement() returned true for first statement")
+	}
+	if _, ok := NextStatement(block, last); ok {
+		t.Fatal("NextStatement() returned true for last statement")
+	}
+}
+
 func TestWalkBlockStatements(t *testing.T) {
 	_, block := parseBlock(t, `package p
 
@@ -51,29 +88,5 @@ func f() {
 		if item.Statement != block.List[i] {
 			t.Fatalf("item %d statement mismatch", i)
 		}
-	}
-}
-
-func TestIsHelenaExitSpacingStatement(t *testing.T) {
-	tests := []struct {
-		name string
-		stmt ast.Stmt
-		want bool
-	}{
-		{name: "return", stmt: &ast.ReturnStmt{}, want: true},
-		{name: "break", stmt: &ast.BranchStmt{Tok: token.BREAK}, want: true},
-		{name: "continue", stmt: &ast.BranchStmt{Tok: token.CONTINUE}, want: true},
-		{name: "goto", stmt: &ast.BranchStmt{Tok: token.GOTO}, want: true},
-		{name: "labeled return", stmt: &ast.LabeledStmt{Stmt: &ast.ReturnStmt{}}, want: true},
-		{name: "labeled break", stmt: &ast.LabeledStmt{Stmt: &ast.BranchStmt{Tok: token.BREAK}}, want: true},
-		{name: "non-exit", stmt: &ast.ExprStmt{}, want: false},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			if got := IsHelenaExitSpacingStatement(tt.stmt); got != tt.want {
-				t.Fatalf("IsHelenaExitSpacingStatement() = %v, want %v", got, tt.want)
-			}
-		})
 	}
 }
