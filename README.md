@@ -50,6 +50,12 @@ See [csharp/README.md](./csharp/README.md) for the current rule list, local deve
 The Java package is published as the `helena-linter-checkstyle` Checkstyle extension jar and
 provides the Helena Java readability rules for Gradle, Maven, or raw Checkstyle consumers.
 
+Published coordinates:
+
+```text
+com.distrohelena:helena-linter-checkstyle:0.1.0
+```
+
 Use it from a Gradle project with:
 
 ```kotlin
