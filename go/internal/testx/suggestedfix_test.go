@@ -41,33 +41,25 @@ func expectFatal(t *testing.T, want string, fn func()) {
 
 func TestRequireSuggestedFix(t *testing.T) {
 	t.Run("returns matching fix", func(t *testing.T) {
-		diagnostics := []analysis.Diagnostic{
-			{
-				SuggestedFixes: []analysis.SuggestedFix{
-					{Message: "other"},
-					{Message: "insert blank line"},
-				},
+		diagnostic := analysis.Diagnostic{
+			SuggestedFixes: []analysis.SuggestedFix{
+				{Message: "other"},
+				{Message: "insert blank line"},
 			},
 		}
 
-		got := RequireSuggestedFix(t, diagnostics, "insert blank line")
+		got := RequireSuggestedFix(t, diagnostic, "insert blank line")
 		if got.Message != "insert blank line" {
 			t.Fatalf("RequireSuggestedFix() = %q, want %q", got.Message, "insert blank line")
 		}
 	})
 
 	t.Run("returns all matching fixes", func(t *testing.T) {
-		fixes := SuggestedFixesByMessage([]analysis.Diagnostic{
-			{
-				SuggestedFixes: []analysis.SuggestedFix{
-					{Message: "duplicate"},
-				},
-			},
-			{
-				SuggestedFixes: []analysis.SuggestedFix{
-					{Message: "other"},
-					{Message: "duplicate"},
-				},
+		fixes := SuggestedFixesByMessage(analysis.Diagnostic{
+			SuggestedFixes: []analysis.SuggestedFix{
+				{Message: "duplicate"},
+				{Message: "other"},
+				{Message: "duplicate"},
 			},
 		}, "duplicate")
 
@@ -83,7 +75,7 @@ func TestRequireSuggestedFix(t *testing.T) {
 		fake := &fakeTB{}
 		want := `did not find suggested fix with message "missing fix"`
 		expectFatal(t, want, func() {
-			RequireSuggestedFix(fake, []analysis.Diagnostic{{}}, "missing fix")
+			RequireSuggestedFix(fake, analysis.Diagnostic{}, "missing fix")
 		})
 	})
 
@@ -91,32 +83,24 @@ func TestRequireSuggestedFix(t *testing.T) {
 		fake := &fakeTB{}
 		want := `found multiple suggested fixes with message "duplicate"`
 		expectFatal(t, want, func() {
-			RequireSuggestedFix(fake, []analysis.Diagnostic{
-				{
-					SuggestedFixes: []analysis.SuggestedFix{
-						{Message: "duplicate"},
-					},
-				},
-				{
-					SuggestedFixes: []analysis.SuggestedFix{
-						{Message: "duplicate"},
-					},
+			RequireSuggestedFix(fake, analysis.Diagnostic{
+				SuggestedFixes: []analysis.SuggestedFix{
+					{Message: "duplicate"},
+					{Message: "duplicate"},
 				},
 			}, "duplicate")
 		})
 	})
 
 	t.Run("returns edits intact", func(t *testing.T) {
-		fix := RequireSuggestedFix(t, []analysis.Diagnostic{
-			{
-				SuggestedFixes: []analysis.SuggestedFix{
-					{
-						Message: "rewrite",
-						TextEdits: []analysis.TextEdit{
-							{
-								Pos: token.Pos(1),
-								End: token.Pos(2),
-							},
+		fix := RequireSuggestedFix(t, analysis.Diagnostic{
+			SuggestedFixes: []analysis.SuggestedFix{
+				{
+					Message: "rewrite",
+					TextEdits: []analysis.TextEdit{
+						{
+							Pos: token.Pos(1),
+							End: token.Pos(2),
 						},
 					},
 				},

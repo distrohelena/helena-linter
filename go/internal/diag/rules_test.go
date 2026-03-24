@@ -28,6 +28,14 @@ func TestRuleIDValidate(t *testing.T) {
 		}
 	})
 
+	t.Run("rejects exact invalid shapes", func(t *testing.T) {
+		for _, rule := range []RuleID{"-early-return", "early-return-", "123"} {
+			if err := rule.Validate(); err == nil {
+				t.Fatalf("%q.Validate() returned nil error", rule)
+			}
+		}
+	})
+
 	t.Run("rejects malformed ids", func(t *testing.T) {
 		for _, rule := range []RuleID{"Bad-Rule", "bad rule", " bad", "bad_underscore", "éclair", "bad--rule"} {
 			if err := rule.Validate(); err == nil {
@@ -44,7 +52,7 @@ func TestMessagePanicsOnInvalidRuleID(t *testing.T) {
 		if !ok {
 			t.Fatalf("panic value = %#v, want error", r)
 		}
-		want := `rule id "bad rule" must use kebab-case`
+		want := `rule id "bad rule" contains invalid character ' '`
 		if err.Error() != want {
 			t.Fatalf("panic value = %q, want %q", err.Error(), want)
 		}

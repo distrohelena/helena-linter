@@ -3,7 +3,6 @@ package diag
 import (
 	"fmt"
 	"strings"
-	"unicode"
 )
 
 type RuleID string
@@ -34,20 +33,30 @@ func (r RuleID) Validate() error {
 	if strings.TrimSpace(raw) != raw {
 		return fmt.Errorf("rule id %q cannot contain leading or trailing whitespace", raw)
 	}
-	if raw != strings.ToLower(raw) {
-		return fmt.Errorf("rule id %q must use lowercase ASCII", raw)
+	if raw[0] < 'a' || raw[0] > 'z' {
+		return fmt.Errorf("rule id %q must start with an ASCII lowercase letter", raw)
 	}
-	if strings.ContainsAny(raw, "_ ") {
-		return fmt.Errorf("rule id %q must use kebab-case", raw)
-	}
-	if strings.Contains(raw, "--") {
-		return fmt.Errorf("rule id %q must use single hyphen separators", raw)
-	}
-	for _, ch := range raw {
-		if ch > unicode.MaxASCII {
+
+	prevHyphen := false
+	for i := 0; i < len(raw); i++ {
+		ch := raw[i]
+		if ch > 0x7f {
 			return fmt.Errorf("rule id %q must contain ASCII characters only", raw)
 		}
-		if !(ch >= 'a' && ch <= 'z' || ch >= '0' && ch <= '9' || ch == '-') {
+		switch {
+		case ch >= 'a' && ch <= 'z':
+			prevHyphen = false
+		case ch >= '0' && ch <= '9':
+			prevHyphen = false
+		case ch == '-':
+			if i == len(raw)-1 {
+				return fmt.Errorf("rule id %q cannot end with a hyphen", raw)
+			}
+			if prevHyphen {
+				return fmt.Errorf("rule id %q cannot contain consecutive hyphens", raw)
+			}
+			prevHyphen = true
+		default:
 			return fmt.Errorf("rule id %q contains invalid character %q", raw, ch)
 		}
 	}
