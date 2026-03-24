@@ -31,7 +31,7 @@ func TestComplementary(t *testing.T) {
 		{name: "different operands", left: "value == nil", right: "other != nil", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
 		{name: "different negation target", left: "!flag", right: "other", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
 		{name: "same polarity", left: "flag", right: "flag", ident: func(left, right *ast.Ident) bool { return left.Name == right.Name }, want: false},
-		{name: "nil comparator is conservative", left: "flag", right: "flag", ident: nil, want: false},
+		{name: "nil comparator is conservative", left: "!flag", right: "flag", ident: nil, want: false},
 	}
 
 	for _, tt := range tests {
@@ -63,5 +63,11 @@ func TestComplementarySelectorNamesStaySpellingBased(t *testing.T) {
 
 	if got := Complementary(mustExpr(t, "obj.foo == nil"), mustExpr(t, "obj.bar != nil"), identEqual); got {
 		t.Fatal("Complementary() = true, want false when selector names differ")
+	}
+}
+
+func TestComplementaryNilComparatorDoesNotPanicOnIdentifierComparison(t *testing.T) {
+	if got := Complementary(mustExpr(t, "!flag"), mustExpr(t, "flag"), nil); got {
+		t.Fatal("Complementary() = true, want false with nil comparator")
 	}
 }

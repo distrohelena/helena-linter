@@ -108,6 +108,18 @@ func TestIsHelenaExitSpacingStatement(t *testing.T) {
 func f() {
 	return
 }`), want: true},
+		{name: "labeled return is spacing exit", stmt: mustStmt(t, `package p
+
+func f() {
+	done:
+		return
+}`), want: true},
+		{name: "labeled break is spacing exit", stmt: mustStmt(t, `package p
+
+func f() {
+	done:
+		break
+}`), want: true},
 		{name: "break is spacing exit", stmt: mustStmt(t, `package p
 
 func f() {

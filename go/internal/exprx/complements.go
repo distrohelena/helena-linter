@@ -73,6 +73,9 @@ func sameExpr(left, right ast.Expr, identEqual IdentEqualFunc) bool {
 	case nil:
 		return right == nil
 	case *ast.Ident:
+		if identEqual == nil {
+			return false
+		}
 		r, ok := right.(*ast.Ident)
 		return ok && identEqual(l, r)
 	case *ast.BasicLit:

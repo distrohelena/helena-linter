@@ -5,6 +5,11 @@ import (
 	"go/token"
 )
 
+// Helena flow helpers live here because the Go rules need two related but
+// distinct concepts:
+// - definitely exiting local control flow for future control-flow rules
+// - Helena exit-style statements for spacing rules
+//
 // DefinitelyExitsControlFlow reports whether stmt definitely stops execution of
 // the surrounding local control flow.
 func DefinitelyExitsControlFlow(stmt ast.Stmt) bool {
@@ -30,6 +35,8 @@ func DefinitelyExitsControlFlow(stmt ast.Stmt) bool {
 // forms that Helena spacing rules treat as an exit-style boundary.
 func IsHelenaExitSpacingStatement(stmt ast.Stmt) bool {
 	switch s := stmt.(type) {
+	case *ast.LabeledStmt:
+		return IsHelenaExitSpacingStatement(s.Stmt)
 	case *ast.ReturnStmt:
 		return true
 	case *ast.BranchStmt:
