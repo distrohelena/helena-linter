@@ -8,8 +8,8 @@ It currently contains:
 - [C# package](./csharp/README.md): `DistroHelena.Linter.CSharp`
 - [Java package](./java/README.md): Helena Checkstyle rules packaged in
   `helena-linter-checkstyle`
-- [Go package](./go/README.md): Helena Go analyzers in
-  `github.com/distrohelena/helena-linter/go`
+- [Go package](./go/README.md): `github.com/distrohelena/helena-linter/go`, the Helena Go
+  analyzer bundle and per-rule packages
 
 ## Packages
 
@@ -74,9 +74,9 @@ verification commands.
 The Go package is published as the `github.com/distrohelena/helena-linter/go` module and provides
 Helena analyzers for Go projects through `golang.org/x/tools/go/analysis`.
 
-Use it from a Go analyzer runner or multichecker by importing the module directly and wiring the
-returned analyzers into your own tool. The bundle hook currently exists as a scaffold placeholder
-and returns no analyzers until later tasks add the actual rule implementations.
+Import `github.com/distrohelena/helena-linter/go/analyzers/<rule>` when you want one analyzer, or
+import `github.com/distrohelena/helena-linter/go/bundle` to wire the recommended analyzer set into
+your own `singlechecker` or `multichecker` tool.
 
 See [go/README.md](./go/README.md) for the package scope, supported-rule list, and local
 verification command.
