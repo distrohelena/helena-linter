@@ -55,6 +55,9 @@ func ifDefinitelyExits(stmt *ast.IfStmt) bool {
 	if stmt == nil {
 		return false
 	}
+	if stmt.Body == nil {
+		return false
+	}
 	if !statementListDefinitelyExits(stmt.Body.List) {
 		return false
 	}

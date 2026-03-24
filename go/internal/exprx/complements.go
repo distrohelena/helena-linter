@@ -132,6 +132,17 @@ func sameExpr(left, right ast.Expr, identEqual IdentEqualFunc) bool {
 	case *ast.IndexExpr:
 		r, ok := right.(*ast.IndexExpr)
 		return ok && sameExpr(l.X, r.X, identEqual) && sameExpr(l.Index, r.Index, identEqual)
+	case *ast.IndexListExpr:
+		r, ok := right.(*ast.IndexListExpr)
+		if !ok || !sameExpr(l.X, r.X, identEqual) || len(l.Indices) != len(r.Indices) {
+			return false
+		}
+		for i := range l.Indices {
+			if !sameExpr(l.Indices[i], r.Indices[i], identEqual) {
+				return false
+			}
+		}
+		return true
 	case *ast.ParenExpr:
 		return sameExpr(l.X, right, identEqual)
 	default:

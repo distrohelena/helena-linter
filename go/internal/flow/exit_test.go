@@ -158,3 +158,23 @@ func f() {
 		})
 	}
 }
+
+func TestDefinitelyExitsControlFlowNilAndSyntheticCases(t *testing.T) {
+	t.Run("nil if body is conservative false", func(t *testing.T) {
+		if got := DefinitelyExitsControlFlow(&ast.IfStmt{}); got {
+			t.Fatal("DefinitelyExitsControlFlow(&ast.IfStmt{}) = true, want false")
+		}
+	})
+
+	t.Run("synthetic labeled nil body is conservative false", func(t *testing.T) {
+		if got := DefinitelyExitsControlFlow(&ast.LabeledStmt{Label: ast.NewIdent("done")}); got {
+			t.Fatal("DefinitelyExitsControlFlow(&ast.LabeledStmt{Name: ...}) = true, want false")
+		}
+	})
+
+	t.Run("nil spacing helper is conservative false", func(t *testing.T) {
+		if got := IsHelenaExitSpacingStatement(&ast.LabeledStmt{}); got {
+			t.Fatal("IsHelenaExitSpacingStatement(&ast.LabeledStmt{}) = true, want false")
+		}
+	})
+}
