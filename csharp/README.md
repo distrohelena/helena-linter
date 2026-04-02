@@ -111,7 +111,7 @@ return value;
 
 ### `HLN005` `declaration-spacing`
 
-Inserts a blank line after local declarations before the next sibling statement.
+Inserts a blank line after local declarations before the next non-declaration sibling statement.
 
 Bad:
 
@@ -124,6 +124,8 @@ Good:
 
 ```csharp
 var result = Compute();
+
+var total = ComputeTotal(result);
 
 Render(result);
 ```

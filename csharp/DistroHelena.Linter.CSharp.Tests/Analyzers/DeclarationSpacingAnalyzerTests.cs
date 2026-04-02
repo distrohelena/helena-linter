@@ -48,38 +48,23 @@ public class DeclarationSpacingAnalyzerTests
     }
 
     /// <summary>
-    /// Verifies a blank line is inserted after a declaration before another declaration.
+    /// Verifies consecutive declarations remain valid without an inserted blank line.
     /// </summary>
     [Fact]
-    public async Task VerifyCodeFixAsync_AddsBlankLineAfterDeclarationBeforeAnotherDeclaration()
+    public async Task VerifyAnalyzerAsync_AllowsConsecutiveDeclarations()
     {
         const string source = """
             class Sample
             {
                 void Run()
                 {
-                    {|#0:int|} count = 1;
-                    int total = count + 1;
-                }
-            }
-            """;
-
-        const string fixedSource = """
-            class Sample
-            {
-                void Run()
-                {
                     int count = 1;
-
                     int total = count + 1;
                 }
             }
             """;
 
-        await VerifyCS.VerifyCodeFixAsync(
-            source,
-            VerifyCS.Diagnostic(HelenaDiagnosticDescriptors.DeclarationSpacing).WithLocation(0),
-            fixedSource);
+        await VerifyCS.VerifyAnalyzerAsync(source);
     }
 
     /// <summary>

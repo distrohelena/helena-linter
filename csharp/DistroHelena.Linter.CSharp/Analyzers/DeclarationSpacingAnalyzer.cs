@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Diagnostics;
 namespace DistroHelena.Linter.CSharp.Analyzers;
 
 /// <summary>
-/// Reports missing blank lines after local declarations.
+/// Reports missing blank lines after local declarations when a non-declaration follows.
 /// </summary>
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public sealed class DeclarationSpacingAnalyzer : DiagnosticAnalyzer
@@ -31,7 +31,7 @@ public sealed class DeclarationSpacingAnalyzer : DiagnosticAnalyzer
     }
 
     /// <summary>
-    /// Reports a diagnostic when a declaration is immediately followed by another statement without a blank line.
+    /// Reports a diagnostic when a declaration is immediately followed by a non-declaration statement without a blank line.
     /// </summary>
     /// <param name="context">The syntax-node analysis context.</param>
     private static void AnalyzeDeclaration(SyntaxNodeAnalysisContext context)
@@ -43,7 +43,9 @@ public sealed class DeclarationSpacingAnalyzer : DiagnosticAnalyzer
 
         StatementSyntax? nextStatement = StatementSequenceHelpers.GetNextStatement(declarationStatement);
 
-        if (nextStatement is null || SyntaxTriviaHelpers.HasBlankLineBetween(declarationStatement, nextStatement))
+        if (nextStatement is null
+            || nextStatement is LocalDeclarationStatementSyntax
+            || SyntaxTriviaHelpers.HasBlankLineBetween(declarationStatement, nextStatement))
         {
             return;
         }

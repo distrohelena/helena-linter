@@ -8,7 +8,8 @@ import dev.distrohelena.linter.checkstyle.helpers.BlankLineAnalyzer;
 import dev.distrohelena.linter.checkstyle.helpers.StatementAstNavigator;
 
 /**
- * Requires a blank line after local declarations before the next sibling statement.
+ * Requires a blank line after local declarations before the next non-declaration sibling
+ * statement.
  */
 public final class DeclarationSpacingCheck extends AbstractCheck {
 
@@ -51,7 +52,8 @@ public final class DeclarationSpacingCheck extends AbstractCheck {
     }
 
     /**
-     * Reports a local declaration that runs directly into the next sibling statement.
+     * Reports a local declaration that runs directly into the next non-declaration sibling
+     * statement.
      *
      * @param ast the declaration statement being visited.
      */
@@ -68,6 +70,8 @@ public final class DeclarationSpacingCheck extends AbstractCheck {
         DetailAST nextSibling = StatementAstNavigator.getNextSibling(ast);
 
         if (nextSibling == null) {
+            return;
+        } else if (nextSibling.getType() == TokenTypes.VARIABLE_DEF) {
             return;
         } else if (BlankLineAnalyzer.hasBlankLineBetween(ast, nextSibling, getFileContents())) {
             return;

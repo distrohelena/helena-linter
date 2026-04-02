@@ -171,7 +171,7 @@ int result = compute();
 
 ### `DeclarationSpacingCheck`
 
-Requires a blank line after local declarations before the next sibling statement.
+Requires a blank line after local declarations before the next non-declaration sibling statement.
 
 Bad:
 
@@ -184,6 +184,8 @@ Good:
 
 ```java
 int result = compute();
+
+int total = computeTotal(result);
 
 render(result);
 ```

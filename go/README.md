@@ -108,7 +108,7 @@ var result = compute()
 
 ### `declaration-spacing`
 
-Requires a blank line after a declaration statement before the next sibling statement.
+Requires a blank line after a declaration statement before the next non-declaration sibling statement.
 
 Bad:
 
@@ -121,6 +121,8 @@ Good:
 
 ```go
 var result = compute()
+
+var total = computeTotal(result)
 
 render(result)
 ```
@@ -295,4 +297,3 @@ Run the Go package tests from the `go/` submodule directory:
 cd go
 go test ./...
 ```
-

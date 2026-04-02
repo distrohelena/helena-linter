@@ -14,7 +14,8 @@ import org.junit.jupiter.api.Test;
 class DeclarationSpacingCheckTests {
 
     /**
-     * Confirms that a declaration must be followed by a blank line before the next sibling statement.
+     * Confirms that a declaration must be followed by a blank line before the next
+     * non-declaration sibling statement.
      *
      * @throws Exception when the sample cannot be read or parsed.
      */
@@ -23,7 +24,7 @@ class DeclarationSpacingCheckTests {
         String source = CheckstyleCheckTestSupport.readResource("/samples/declaration-spacing/invalid.java");
         SortedSet<Violation> violations = CheckstyleCheckTestSupport.runCheck(new DeclarationSpacingCheck(), source);
 
-        assertEquals(List.of(3, 4, 9), CheckstyleCheckTestSupport.violationLines(violations));
+        assertEquals(List.of(4, 9), CheckstyleCheckTestSupport.violationLines(violations));
     }
 
     /**

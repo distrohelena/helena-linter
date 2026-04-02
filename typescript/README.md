@@ -115,7 +115,7 @@ const result = compute();
 
 ### `@distrohelena/linter/declaration-spacing`
 
-Requires a blank line after a declaration statement before the next sibling statement.
+Requires a blank line after a declaration statement before the next non-declaration sibling statement.
 
 Bad:
 
@@ -128,6 +128,8 @@ Good:
 
 ```ts
 const result = compute();
+
+const total = computeTotal(result);
 
 render(result);
 ```

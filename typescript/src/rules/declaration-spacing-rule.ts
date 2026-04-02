@@ -14,7 +14,7 @@ const createRule = ESLintUtils.RuleCreator(
 );
 
 /**
- * Enforces spacing after declaration statements.
+ * Enforces spacing after declarations when a non-declaration statement follows.
  */
 export const declarationSpacingRule = createRule({
     name: "declaration-spacing",
@@ -23,11 +23,11 @@ export const declarationSpacingRule = createRule({
         fixable: "whitespace",
         docs: {
             description:
-                "Require a blank line after a declaration statement before the next sibling statement.",
+                "Require a blank line after a declaration statement before the next non-declaration sibling statement.",
         },
         messages: {
             declarationSpacing:
-                "Insert a blank line after a declaration statement before the next sibling statement.",
+                "Insert a blank line after a declaration statement before the next non-declaration sibling statement.",
         },
         schema: [],
     },
@@ -80,6 +80,9 @@ export const declarationSpacingRule = createRule({
                         const nextStatement = statements[index + 1];
 
                         if (!ts.isVariableStatement(currentStatement)) {
+                            continue;
+                        }
+                        if (ts.isVariableStatement(nextStatement)) {
                             continue;
                         }
 
